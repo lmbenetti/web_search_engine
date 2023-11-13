@@ -1,5 +1,4 @@
 package searchengine;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -10,15 +9,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 public class WebServer {
+  
   static final int PORT = 8080;
   static final int BACKLOG = 0;
   static final Charset CHARSET = StandardCharsets.UTF_8;
-
   List<List<String>> pages = new ArrayList<>();
   HttpServer server;
 
