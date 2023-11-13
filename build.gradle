@@ -58,9 +58,11 @@ task downloadAndUnzip(dependsOn: downloadZipFile, type: Copy) {
 }
 
 task buildConf() {
+    /*
      if (!new File('data', 'enwiki-medium.txt').exists()) {
          dependsOn downloadAndUnzip
      }
+     */
     doLast {
         File configFile = file('config.txt')
         if(!configFile.exists() ) {
@@ -76,8 +78,10 @@ run {
 }
 tasks.named('test') {
     // Use junit platform for unit tests.
+    /*
     if (!new File('data', 'enwiki-medium.txt').exists()) {
         dependsOn downloadAndUnzip
     }
+    */
     useJUnitPlatform()
 }
