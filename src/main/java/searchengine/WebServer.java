@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
@@ -18,11 +17,38 @@ public class WebServer {
   static final int PORT = 8080;
   static final int BACKLOG = 0;
   static final Charset CHARSET = StandardCharsets.UTF_8;
-
-  List<List<String>> pages = new ArrayList<>();
   HttpServer server;
+  QueryHandler queryHandler;
+  List<List<String>> pages;
 
-  WebServer(int port, String filename) throws IOException {
+  WebServer(int port, String filename) throws IOException {      
+    pages = new ArrayList<>();
+    server = HttpServer.create(new InetSocketAddress(port), BACKLOG);
+    getPages(filename);
+    createServerContext();
+    server.start();
+    printServerMessage(port);
+  }
+
+  public void printServerMessage(int port) {
+    String msg = " WebServer running on http://localhost:" + port + " ";
+    System.out.println("╭"+"─".repeat(msg.length())+"╮");
+    System.out.println("│"+msg+"│");
+    System.out.println("╰"+"─".repeat(msg.length())+"╯");
+  }
+
+  public void createServerContext() {
+    server.createContext("/", io -> respond(io, 200, "text/html", getFile("web/index.html")));
+    server.createContext("/search", io -> search(io));
+    server.createContext(
+        "/favicon.ico", io -> respond(io, 200, "image/x-icon", getFile("web/favicon.ico")));
+    server.createContext(
+        "/code.js", io -> respond(io, 200, "application/javascript", getFile("web/code.js")));
+    server.createContext(
+        "/style.css", io -> respond(io, 200, "text/css", getFile("web/style.css")));
+  }
+
+  public void getPages(String filename) throws IOException {
     try {
       List<String> lines = Files.readAllLines(Paths.get(filename));
       var lastIndex = lines.size();
@@ -32,24 +58,11 @@ public class WebServer {
           lastIndex = i;
         }
       }
-    } catch (FileNotFoundException e) {
+      Collections.reverse(pages);
+    }
+    catch (FileNotFoundException e) {
       e.printStackTrace();
     }
-    Collections.reverse(pages);
-    server = HttpServer.create(new InetSocketAddress(port), BACKLOG);
-    server.createContext("/", io -> respond(io, 200, "text/html", getFile("web/index.html")));
-    server.createContext("/search", io -> search(io));
-    server.createContext(
-        "/favicon.ico", io -> respond(io, 200, "image/x-icon", getFile("web/favicon.ico")));
-    server.createContext(
-        "/code.js", io -> respond(io, 200, "application/javascript", getFile("web/code.js")));
-    server.createContext(
-        "/style.css", io -> respond(io, 200, "text/css", getFile("web/style.css")));
-    server.start();
-    String msg = " WebServer running on http://localhost:" + port + " ";
-    System.out.println("╭"+"─".repeat(msg.length())+"╮");
-    System.out.println("│"+msg+"│");
-    System.out.println("╰"+"─".repeat(msg.length())+"╯");
   }
   
   void search(HttpExchange io) {
