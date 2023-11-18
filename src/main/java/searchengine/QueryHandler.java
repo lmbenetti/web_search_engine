@@ -31,7 +31,17 @@ public class QueryHandler {
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-  }
+    }
+
+        public List<List<String>> searchWebpages(String searchTerm) {
+            var result = new ArrayList<List<String>>();
+            for (var page : pages) {
+              if (page.contains(searchTerm)) {
+                result.add(page);
+              }
+            }
+            return result;
+          }
     
 
     // public void getMatchingWebPages(String query) {
