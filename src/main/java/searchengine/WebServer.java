@@ -17,8 +17,9 @@ public class WebServer {
   QueryHandler queryHandler;
 
   WebServer(int port, String filename) throws IOException {      
+    queryHandler = new QueryHandler();
+    queryHandler.getPages(filename);
     server = HttpServer.create(new InetSocketAddress(port), BACKLOG);
-    server.start();
   }
 
   public void printServerMessage(int port) {
@@ -37,9 +38,10 @@ public class WebServer {
         "/code.js", io -> respond(io, 200, "application/javascript", getFile("web/code.js")));
     server.createContext(
         "/style.css", io -> respond(io, 200, "text/css", getFile("web/style.css")));
-  }
-
-  
+    server.start();
+      }
+      
+      
   void generateSearchResults(HttpExchange io) {
     var searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
     var response = new ArrayList<String>();
@@ -54,7 +56,8 @@ public class WebServer {
   byte[] getFile(String filename) {
     try {
       return Files.readAllBytes(Paths.get(filename));
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       e.printStackTrace();
       return new byte[0];
     }
@@ -63,11 +66,13 @@ public class WebServer {
   void respond(HttpExchange io, int code, String mime, byte[] response) {
     try {
       io.getResponseHeaders()
-          .set("Content-Type", String.format("%s; charset=%s", mime, CHARSET.name()));
+        .set("Content-Type", String.format("%s; charset=%s", mime, CHARSET.name()));
       io.sendResponseHeaders(200, response.length);
       io.getResponseBody().write(response);
-    } catch (Exception e) {
-    } finally {
+    }
+    catch (Exception e) {
+    }
+    finally {
       io.close();
     }
   }

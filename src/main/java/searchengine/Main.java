@@ -5,8 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Main {
-    static final int PORT = 8080;
-    public static void main(String[] args) throws IOException {
+    public static void main(final String... args) throws IOException {
+        int PORT = 8080;
         var filename = Files.readString(Paths.get("config.txt")).strip();
         WebServer webserver = new WebServer(PORT, filename);
         webserver.createServerContext();

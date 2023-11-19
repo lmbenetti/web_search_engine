@@ -11,9 +11,8 @@ import java.util.List;
 public class QueryHandler {
     List<List<String>> pages;
 
-    public QueryHandler(String filename) throws IOException {
+    public QueryHandler() throws IOException {
         pages = new ArrayList<>();
-        getPages(filename);
     }
 
     public void getPages(String filename) throws IOException {

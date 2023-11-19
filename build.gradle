@@ -40,7 +40,7 @@ dependencies {
 
 application {
     // Define the main class for the application
-	  mainClass.set("searchengine.WebServer")
+	  mainClass.set("searchengine.Main")
 }
 
 task downloadZipFile(type: Download) {
