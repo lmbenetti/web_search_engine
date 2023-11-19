@@ -72,7 +72,7 @@ task buildConf() {
 
 run {
     dependsOn buildConf
-    mainClassName = 'searchengine.WebServer'
+    mainClassName = 'searchengine.Main'
 }
 tasks.named('test') {
     // Use junit platform for unit tests.
