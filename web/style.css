@@ -1,20 +1,123 @@
-#urllist {
-    color: #969696;
-    border: 1px solid #dcdcdc;
-    border-radius: 3px;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
-input[type="text"] {
-    padding: 10px;
-    margin: 10px;
-    border: solid 1px #dcdcdc;
-    border-radius: 4px;
-    min-width: 200px;
-    transition: box-shadow 0.3s, border 0.3s;
+body{
+    font-size: .8rem;
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: .1px;
+    text-rendering: optimizeLegibility;
+    background-color: #f2f4f7;
 }
 
-input[type="text"]:focus,
-input[type="text"].focus {
-    border: solid 1px #707070;
-    box-shadow: 0 0 5px 1px #969696;
+h1{
+    font-size: 18px;
+}
+
+#search{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+
+#search-container {
+    background-color: #f9fafd;
+    padding: 1.2rem 1.2rem 0.9rem 180px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 85px;
+    width: 100%;
+    border-bottom: #e3e5ea 1px solid;
+}
+
+input[type="text" i] {
+    padding-inline: 20px;
+}
+
+#searchbox {
+    width: 514px; 
+    height: 45px;
+    border-radius: 40px 0px 0px 40px;
+    border: none;
+    outline: none;
+    background-color: #ffffff;
+    margin-left: 1.2rem;
+    font-size: 0.9rem;
+}
+
+#searchbutton {
+    height: 45px;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 0px 40px 40px 0px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+#searchbutton:hover > svg > path{
+    fill: white;
+}
+
+#searchbutton:hover {
+    background-color: #f0f0f0;
+    border-color: #c6c6c6;
+
+    path{
+        fill: white;
+    }
+}
+
+#list-container {
+    text-align: left;
+    width: 60%;
+    min-height: calc(100vh - 85px);
+    margin-top: 85px;
+    margin-bottom: 45px;
+    padding-left: 180px ;
+    background-color: #f2f4f7;
+}
+
+#list-container  p {
+    color: #70757a;
+    height: 43px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#responsesize, #urllist {
+    margin: 10px 0;
+}
+
+#urllist ul {
+    list-style: none;
+    padding: 0;
+}
+
+#urllist li a {
+    color: #1a0dab;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+#urllist li a:hover {
+    text-decoration: underline;
+}
+
+.content-anchor{
+    display: block;
+    width: max-content;
+    min-height: 35px;
+    background-color: transparent;
 }
