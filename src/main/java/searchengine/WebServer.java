@@ -29,6 +29,8 @@ public class WebServer {
           pages.add(lines.subList(i, lastIndex));
           lastIndex = i;
         }
+       // If a web page entry contains less than two lines after the “*PAGE” line, i.e., it has either no title or no words, the entry should be omitted.
+        //(We have to assume that the entry for this web page is erroneous.)
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();

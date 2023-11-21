@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 document.addEventListener('DOMContentLoaded', function() {
 
-    document.getElementById('searchbutton').onclick = () => {
+    const search = function(){
         fetch("/search?q=" + document.getElementById('searchbox').value)
         .then((response) => response.json())
         .then((data) => {
@@ -12,7 +12,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 .join("\n");
             document.getElementById("urllist").innerHTML = `<ul>${results}</ul>`;
         });
-    };
+    }
+
+    document.getElementById('searchbutton').onclick = search;
+
+    document.getElementById('searchbox').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            document.getElementById('searchbutton').click();
+        }
+    });
+    
 
 
 });
