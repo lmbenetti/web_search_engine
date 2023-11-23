@@ -21,6 +21,7 @@ public class WebServer {
   HttpServer server;
 
   WebServer(int port, String filename) throws IOException {
+
     try {
       List<String> lines = Files.readAllLines(Paths.get(filename));
       var lastIndex = lines.size();
@@ -29,14 +30,14 @@ public class WebServer {
           pages.add(lines.subList(i, lastIndex));
           lastIndex = i;
         }
-       // If a web page entry contains less than two lines after the “*PAGE” line, i.e., it has either no title or no words, the entry should be omitted.
-        //(We have to assume that the entry for this web page is erroneous.)
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
+
     Collections.reverse(pages);
     server = HttpServer.create(new InetSocketAddress(port), BACKLOG);
+
     server.createContext("/", io -> respond(io, 200, "text/html", getFile("web/index.html")));
     server.createContext("/search", io -> search(io));
     server.createContext(
@@ -45,12 +46,14 @@ public class WebServer {
         "/code.js", io -> respond(io, 200, "application/javascript", getFile("web/code.js")));
     server.createContext(
         "/style.css", io -> respond(io, 200, "text/css", getFile("web/style.css")));
+    
     server.start();
     String msg = " WebServer running on http://localhost:" + port + " ";
     System.out.println("╭"+"─".repeat(msg.length())+"╮");
     System.out.println("│"+msg+"│");
     System.out.println("╰"+"─".repeat(msg.length())+"╯");
   }
+
   
   void search(HttpExchange io) {
     var searchTerm = io.getRequestURI().getRawQuery().split("=")[1];

@@ -21,7 +21,4 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('searchbutton').click();
         }
     });
-    
-
-
 });
