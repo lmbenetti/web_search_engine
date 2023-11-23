@@ -49,6 +49,9 @@ public class Page {
     }
     
     public Integer getWordFrequency(String word){
+        if (!wordFrequency.containsKey(word)){
+            return -1;
+        }
         return wordFrequency.get(word);
     }
 }
