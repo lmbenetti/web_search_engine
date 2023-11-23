@@ -40,7 +40,7 @@ dependencies {
 
 application {
     // Define the main class for the application
-	  mainClass.set("searchengine.WebServer")
+	  mainClass.set("searchengine.Main")
 }
 
 task downloadZipFile(type: Download) {
@@ -60,7 +60,7 @@ task downloadAndUnzip(dependsOn: downloadZipFile, type: Copy) {
 task buildConf() {
     /*
      if (!new File('data', 'enwiki-medium.txt').exists()) {
-         dependsOn downloadAndUnzip
+         //dependsOn downloadAndUnzip
      }
      */
     doLast {
@@ -74,13 +74,13 @@ task buildConf() {
 
 run {
     dependsOn buildConf
-    mainClassName = 'searchengine.WebServer'
+    mainClassName = 'searchengine.Main'
 }
 tasks.named('test') {
     // Use junit platform for unit tests.
     /*
     if (!new File('data', 'enwiki-medium.txt').exists()) {
-        dependsOn downloadAndUnzip
+        //dependsOn downloadAndUnzip
     }
     */
     useJUnitPlatform()
