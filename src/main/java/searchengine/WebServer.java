@@ -17,8 +17,7 @@ public class WebServer {
   QueryHandler queryHandler;
 
   WebServer(int port, String filename) throws IOException {      
-    queryHandler = new QueryHandler();
-    queryHandler.getPages(filename);
+    queryHandler = new QueryHandler(filename);
     server = HttpServer.create(new InetSocketAddress(port), BACKLOG);
   }
 
@@ -44,15 +43,17 @@ public class WebServer {
       
       
   void generateSearchResults(HttpExchange io) {
-    var searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
-    var response = new ArrayList<String>();
-    for (var page : queryHandler.searchWebpages(searchTerm)) {
+    String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
+    ArrayList <String> response = new ArrayList<>();
+    for (Page page : queryHandler.getMatchingWebPages(searchTerm)) {
       response.add(String.format("{\"url\": \"%s\", \"title\": \"%s\"}",
-        page.get(0).substring(6), page.get(1)));
+        page.getUrl(), page.getTitle()));
     }
-    var bytes = response.toString().getBytes(CHARSET);
+    byte[] bytes = response.toString().getBytes(CHARSET);
     respond(io, 200, "application/json", bytes);
   }
+
+  
 
   byte[] getFile(String filename) {
     try {

@@ -57,4 +57,9 @@ public class WebMapper {
             return new ArrayList<Page>();
         }
     }
+
+    public HashMap<String, List<Page>> getWebMap() {
+        return webMap;
+    }
+    
 }
