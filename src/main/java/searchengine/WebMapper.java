@@ -1,4 +1,5 @@
 package searchengine;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -26,27 +27,24 @@ public class WebMapper {
                 }
                 else mapToReturn.put(word, new ArrayList<Page>(){{
                     add(page);
-                }} );
+                }});
             }
         }
         return mapToReturn;
     }
 
-
-
     private List<Page> getPages(String filename) {
         try {
             List<Page> pageList = new ArrayList<>();
             List<String> lines = Files.readAllLines(Paths.get(filename));
-            var lastIndex = lines.size();
-            for (var i = lines.size() - 1; i >= 0; --i) {
+            int lastIndex = lines.size();
+            for (int i = lines.size() - 1; i >= 0; --i) {
                 if (lines.get(i).startsWith("*PAGE")) {
                 pageList.add(new Page(lines.subList(i, lastIndex)));
                 lastIndex = i;
                 }
             }
             return pageList;
-
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -61,5 +59,4 @@ public class WebMapper {
     public HashMap<String, List<Page>> getWebMap() {
         return webMap;
     }
-    
 }

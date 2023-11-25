@@ -11,24 +11,25 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 public class WebServer {
-  static final int BACKLOG = 0;
-  static final Charset CHARSET = StandardCharsets.UTF_8;
-  HttpServer server;
-  QueryHandler queryHandler;
+  private static final int BACKLOG = 0;
+  private static final Charset CHARSET = StandardCharsets.UTF_8;
+  private static int PORT = 8080;
+  private HttpServer server;
+  private QueryHandler queryHandler;
 
-  WebServer(int port, String filename) throws IOException {      
+  public WebServer(String filename) throws IOException {      
     queryHandler = new QueryHandler(filename);
-    server = HttpServer.create(new InetSocketAddress(port), BACKLOG);
   }
-
-  public void printServerMessage(int port) {
-    String msg = " WebServer running on http://localhost:" + port + " ";
+  
+  public void printServerMessage(int PORT) {
+    String msg = " WebServer running on http://localhost:" + PORT + " ";
     System.out.println("╭"+"─".repeat(msg.length())+"╮");
     System.out.println("│"+msg+"│");
     System.out.println("╰"+"─".repeat(msg.length())+"╯");
   }
-
-  public void createServerContext() {
+  
+  public void createServerContext() throws IOException {
+    server = HttpServer.create(new InetSocketAddress(PORT), BACKLOG);
     server.createContext("/", io -> respond(io, 200, "text/html", getFile("web/index.html")));
     server.createContext("/search", io -> generateSearchResults(io));
     server.createContext(
@@ -55,7 +56,7 @@ public class WebServer {
 
   
 
-  byte[] getFile(String filename) {
+  private byte[] getFile(String filename) {
     try {
       return Files.readAllBytes(Paths.get(filename));
     }
@@ -65,7 +66,7 @@ public class WebServer {
     }
   }
 
-  void respond(HttpExchange io, int code, String mime, byte[] response) {
+  private void respond(HttpExchange io, int code, String mime, byte[] response) {
     try {
       io.getResponseHeaders()
         .set("Content-Type", String.format("%s; charset=%s", mime, CHARSET.name()));
@@ -79,4 +80,13 @@ public class WebServer {
     }
   }
 
+  public void runServer() {
+    try {
+      createServerContext();
+      printServerMessage(PORT);
+    }
+    catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }

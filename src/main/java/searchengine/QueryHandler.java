@@ -1,6 +1,5 @@
 package searchengine;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 public class QueryHandler {
     private WebMapper webMapper;
     
-
     public QueryHandler(String fileName) throws IOException {
         webMapper = new WebMapper(fileName);
     }
