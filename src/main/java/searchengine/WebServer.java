@@ -21,7 +21,7 @@ public class WebServer {
     queryHandler = new QueryHandler(filename);
   }
   
-  public void printServerMessage(int PORT) {
+  public void printServerMessage() {
     String msg = " WebServer running on http://localhost:" + PORT + " ";
     System.out.println("╭"+"─".repeat(msg.length())+"╮");
     System.out.println("│"+msg+"│");
@@ -83,7 +83,7 @@ public class WebServer {
   public void runServer() {
     try {
       createServerContext();
-      printServerMessage(PORT);
+      printServerMessage();
     }
     catch (IOException e) {
       e.printStackTrace();
