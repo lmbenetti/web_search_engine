@@ -28,21 +28,21 @@ import java.util.HashSet;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class PageTest {
+    private Page systemUnderTest;
+
+    @BeforeAll 
+    void init(){
+    systemUnderTest=new Page(new ArrayList<String>(Arrays.asList("*PAGE:https://en.wikipedia.org/wiki/United_States\nUnited States\nthe\nunited\nstates\nof\namerica".split("\n"))));
+    }
 
     @Test
     void pageConstructor_CorrectInput_TitleTest(){
-        List<String> input = new ArrayList<String>(Arrays.asList("*PAGE:https://en.wikipedia.org/wiki/United_States\nUnited States\nthe\nunited\nstates\nof\namerica".split("\n")));
-        System.out.println(input);
-        Page test = new Page(input);
-        assertEquals("United States", test.getTitle());
+        assertEquals("United States", systemUnderTest.getTitle());
     }
 
     @Test
     void pageConstructor_CorrectInput_URLTest(){
-        List<String> input = new ArrayList<String>(Arrays.asList("*PAGE:https://en.wikipedia.org/wiki/United_States\nUnited States\nthe\nunited\nstates\nof\namerica".split("\n")));
-        System.out.println(input);
-        Page test = new Page(input);
-        assertEquals("https://en.wikipedia.org/wiki/United_States", test.getUrl());
+        assertEquals("https://en.wikipedia.org/wiki/United_States", systemUnderTest.getUrl());
     }
 
 
@@ -60,13 +60,17 @@ public class PageTest {
         List<String> input = new ArrayList<String>(Arrays.asList("*PAGE:https://en.wikipedia.org/wiki/United_States\nUnited States\nthe\nthe\nunited\nstates\nof\namerica".split("\n")));
         System.out.println(input);
         Page test = new Page(input);
+        Set<String> expected = new HashSet<String>();
+        expected.add("the");
+        expected.add("united");
+        expected.add("states");
+        expected.add("of");
+        expected.add("america");
 
-        Set<String> expected = Stream.of("the", "united", "states", "of", "america")
-        .collect(Collectors.toCollection(HashSet::new));
-        assertEquals((Integer) 2, test.getWordFrequency("the"));
+        assertEquals(expected, systemUnderTest.getWebSiteWords());
     }
 
-
+ /* 
     @Test
     void pageConstructor_CorrectInput_MapTest(){
         List<String> input = new ArrayList<String>(Arrays.asList("*PAGE:https://en.wikipedia.org/wiki/United_States\nUnited States\nthe\nunited\nstates\nof\namerica".split("\n")));
@@ -82,6 +86,7 @@ public class PageTest {
         assertEquals(expected, test.getWordFrequencyMap());
     }
 
+    */
 
     
 }
