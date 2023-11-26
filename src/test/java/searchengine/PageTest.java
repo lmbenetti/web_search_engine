@@ -54,6 +54,11 @@ public class PageTest {
         assertEquals((Integer) 2, test.getWordFrequency("the"));
     }
 
+    @Test
+    void pageConstructor_IncorrectInput_WordFrequencyTest(){
+        assertEquals( -1, systemUnderTest.getWordFrequency("Husband"));
+    }
+
 
     @Test
     void pageConstructor_CorrectInput_KeySetTest(){
