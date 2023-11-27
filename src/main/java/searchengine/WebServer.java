@@ -17,8 +17,8 @@ public class WebServer {
   private HttpServer server;
   private QueryHandler queryHandler;
 
-  public WebServer(String filename) throws IOException {      
-    queryHandler = new QueryHandler(filename);
+  public WebServer() throws IOException {      
+    queryHandler = new QueryHandler();
   }
   
   private void printServerMessage() {

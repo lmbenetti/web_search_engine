@@ -10,9 +10,15 @@ import java.nio.file.Paths;
 
 public class WebMapper {
     private HashMap<String, List<Page>> webMap;
+    private String fileName;
 
-    public WebMapper(String filename){
-        webMap = makeWebMap(filename);
+    public WebMapper()throws IOException{
+        fileName = Files.readString(Paths.get("config.txt")).strip();
+        webMap = makeWebMap(fileName);
+    }
+
+    public void createInvertedIndex()throws IOException{
+        webMap = makeWebMap(fileName);
     }
 
     private HashMap<String, List<Page>> makeWebMap(String filename){
