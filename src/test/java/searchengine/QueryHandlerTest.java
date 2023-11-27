@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.HashSet;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class QueryHandlerTest {
     private QueryHandler systemUnderTest;
 
@@ -38,7 +39,7 @@ public class QueryHandlerTest {
 
     @Test
     void QueryHandler_getMatchingWebPages_is_ListofPage(){
-        assertEquals(Page.class, systemUnderTest.getMatchingWebPages("Homer"));
+        assertEquals(Page.class, systemUnderTest.getMatchingWebPages("bee").get(0).getClass());
     }
 
 
