@@ -12,9 +12,10 @@ public class QueryHandler {
     }
 
     public List<Page> getMatchingWebPages(String query) {
+        String queryLowerCase = query.toLowerCase();
         List<Page> listToReturn = new ArrayList<Page>();
-        if (webMapper.getWebMap().containsKey(query)){
-            listToReturn = webMapper.getWebMap().get(query);
+        if (webMapper.getWebMap().containsKey(queryLowerCase)){
+            listToReturn = webMapper.getWebMap().get(queryLowerCase);
             return listToReturn;
         }
         return listToReturn;
