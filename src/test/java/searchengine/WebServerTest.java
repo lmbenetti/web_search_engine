@@ -14,10 +14,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class WebServerTest {
-    /* 
+    
     WebServer server = null;
 
     @BeforeAll
@@ -26,8 +27,9 @@ class WebServerTest {
             var rnd = new Random();
             while (server == null) {
                 try {
-                    server = new WebServer("data/test-file.txt");
+                    server = new WebServer("config.txt");
                 } catch (BindException e) {
+                    e.printStackTrace();
                     // port in use. Try again
                 }
             }
@@ -42,9 +44,11 @@ class WebServerTest {
         server = null;
     }
 
+    /* 
     @Test
     void lookupWebServer() {
-        String baseURL = String.format("http://localhost:%d/search?q=", server.getServerPort());
+        String baseURL = "http://localhost:8080/";
+        server.
         assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}, {\"url\": \"http://page2.com\", \"title\": \"title2\"}]", 
             httpGet(baseURL + "word1"));
         assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}]",
@@ -66,7 +70,9 @@ class WebServerTest {
             return null;
         }
     }
+
     */
+    
     
 }
 
