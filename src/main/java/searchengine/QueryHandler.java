@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class QueryHandler {
@@ -30,6 +31,12 @@ public class QueryHandler {
         return listToReturn;
     }
 
+    public ArrayList <String> getWords(String query){
+        String queryFormated = query.replaceAll(" +", " ");
+        ArrayList <String> listOfWords = new ArrayList<>(Arrays.asList(queryFormated.split(" ")));
+        return listOfWords;
+    }
+
     public List<Page> processQuery (String query) throws UnsupportedEncodingException {
         String formatedQuery = decodedQuery(query).toLowerCase().trim();
         List<Page> listToReturn = new ArrayList<Page>();
@@ -37,5 +44,6 @@ public class QueryHandler {
             listToReturn=getMatchingPages(formatedQuery);
         } 
         return listToReturn;
-    }     
+    }
+         
 }
