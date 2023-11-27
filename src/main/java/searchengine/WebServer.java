@@ -1,6 +1,7 @@
 package searchengine;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -42,7 +43,7 @@ public class WebServer {
       }
       
       
-  private void generateSearchResults(HttpExchange io) {
+  private void generateSearchResults(HttpExchange io) throws UnsupportedEncodingException {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
     ArrayList <String> response = new ArrayList<>();
     for (Page page : queryHandler.getMatchingWebPages(searchTerm)) {
