@@ -15,8 +15,11 @@ public class QueryHandler {
     }
 
     private String decodedQuery(String originalQuery)throws UnsupportedEncodingException{
-        String toReturn = URLDecoder.decode(originalQuery, StandardCharsets.UTF_8.toString());
-        return toReturn;
+        return URLDecoder.decode(originalQuery, StandardCharsets.UTF_8.toString());
+    }
+
+    private boolean isSimpleWord(String query) throws UnsupportedEncodingException{
+        return (!decodedQuery(query).trim().contains(" ")); 
     }
 
     public List<Page> getMatchingWebPages(String query) throws UnsupportedEncodingException {
