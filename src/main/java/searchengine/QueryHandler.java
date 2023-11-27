@@ -22,13 +22,20 @@ public class QueryHandler {
         return (!decodedQuery(query).trim().contains(" ")); 
     }
 
-    public List<Page> getMatchingWebPages(String query) throws UnsupportedEncodingException {
-        String queryLowerCase = decodedQuery(query).toLowerCase().trim();
+    private List <Page> getMatchingPages(String query){
         List<Page> listToReturn = new ArrayList<Page>();
-        if (webMapper.getWebMap().containsKey(queryLowerCase)){
-            listToReturn = webMapper.getWebMap().get(queryLowerCase);
-            return listToReturn;
+        if (webMapper.getWebMap().containsKey(query)){
+            listToReturn = webMapper.getWebMap().get(query);
         }
         return listToReturn;
     }
+
+    public List<Page> processQuery (String query) throws UnsupportedEncodingException {
+        String formatedQuery = decodedQuery(query).toLowerCase().trim();
+        List<Page> listToReturn = new ArrayList<Page>();
+        if(isSimpleWord(formatedQuery)){
+            listToReturn=getMatchingPages(formatedQuery);
+        } 
+        return listToReturn;
+    }     
 }

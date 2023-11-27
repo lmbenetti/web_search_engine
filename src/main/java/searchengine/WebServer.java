@@ -46,7 +46,7 @@ public class WebServer {
   private void generateSearchResults(HttpExchange io) throws UnsupportedEncodingException {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
     ArrayList <String> response = new ArrayList<>();
-    for (Page page : queryHandler.getMatchingWebPages(searchTerm)) {
+    for (Page page : queryHandler.processQuery(searchTerm)) {
       response.add(String.format("{\"url\": \"%s\", \"title\": \"%s\"}",
         page.getUrl(), page.getTitle()));
     }
