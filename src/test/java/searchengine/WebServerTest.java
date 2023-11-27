@@ -38,7 +38,7 @@ class WebServerTest {
 
     @AfterAll
     void tearDown() {
-        server.stop(0);
+        server.stopServer();
         server = null;
     }
 
