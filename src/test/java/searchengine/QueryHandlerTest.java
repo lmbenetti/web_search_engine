@@ -1,4 +1,5 @@
 package searchengine;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -25,26 +26,20 @@ import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.HashSet;
 
-
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class WebMapperTest {
-    private WebMapper systemUnderTest_small;
+public class QueryHandlerTest {
+    private QueryHandler systemUnderTest;
 
     @BeforeAll 
     void init(){
-    systemUnderTest_small = new WebMapper("data/enwiki-medium.txt");
+        systemUnderTest = new QueryHandler("data/enwiki-medium.txt");
+
     }
+
 
     @Test
-    void WebMapper_getWebMap_correctType(){
-        assertEquals(systemUnderTest_small.getClass(), WebMapper.class);
+    void QueryHandler_getMatchingWebPages_is_ListofPage(){
+        assertEquals(Page.class, systemUnderTest.getMatchingWebPages("Homer"));
     }
 
-    @Test
-    void WebMapper_getWebMap_containsPage(){
-        assertEquals( Page.class, systemUnderTest_small.getWebMap().get("penis").get(0).getClass());
-    }
-
-    
 
 }

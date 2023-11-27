@@ -82,7 +82,7 @@ public class PageTest {
         System.out.println(input);
         Page test = new Page(input);
         Map<String, Integer> expected =  Stream.of(new Object[][] { 
-        {"the", 1},
+        {"the", 1},s
         { "united", 1 }, 
         { "states", 1 }, 
         { "of", 1 }, 
