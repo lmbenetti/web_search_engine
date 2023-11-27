@@ -28,6 +28,7 @@ class WebServerTest {
             while (server == null) {
                 try {
                     server = new WebServer("config.txt");
+                    server.runServer();
                 } catch (BindException e) {
                     e.printStackTrace();
                     // port in use. Try again
@@ -43,12 +44,10 @@ class WebServerTest {
         server.stopServer();
         server = null;
     }
-
-    /* 
+  
     @Test
     void lookupWebServer() {
         String baseURL = "http://localhost:8080/";
-        server.
         assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}, {\"url\": \"http://page2.com\", \"title\": \"title2\"}]", 
             httpGet(baseURL + "word1"));
         assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}]",
@@ -71,7 +70,7 @@ class WebServerTest {
         }
     }
 
-    */
+
     
     
 }
