@@ -50,10 +50,13 @@ class WebServerTest {
     void WebServer_getServerPort_isValidPort(){
         assertTrue(server.getServerPort() == 8080, "Server Port is not standard port");
     }
-    /* 
+
+
+/* 
     @Test
     void lookupWebServer() {
         String baseURL = String.format("http://localhost:%d/search?q=", server.getServerPort());
+        assertEquals(baseURL, baseURL);
         assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}, {\"url\": \"http://page2.com\", \"title\": \"title2\"}]", 
             httpGet(baseURL + "word1"));
         assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}]",
@@ -63,8 +66,8 @@ class WebServerTest {
         assertEquals("[]", 
             httpGet(baseURL + "word4"));
     }
-    */
 
+ */
     private String httpGet(String url) {
         var uri = URI.create(url);
         var client = HttpClient.newHttpClient();
