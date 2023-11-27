@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
 
 public class QueryHandler {
     private WebMapper webMapper;
@@ -31,10 +32,31 @@ public class QueryHandler {
         return listToReturn;
     }
 
-    public ArrayList <String> getWords(String query){
+    private ArrayList <String> getWords(String query){
         String queryFormated = query.replaceAll(" +", " ");
         ArrayList <String> listOfWords = new ArrayList<>(Arrays.asList(queryFormated.split(" ")));
         return listOfWords;
+    }
+
+    private ArrayList <Page> getMatchinPagesMultipleWords(ArrayList<String> listOfWords){
+        ArrayList <Page> toReturn = new ArrayList<>();
+        HashMap <Page, Integer> pagesOfTheSearch = new HashMap<>();
+        for (String word : listOfWords){
+            for (Page page : getMatchingPages(word)){
+                if (pagesOfTheSearch.containsKey(page)){
+                    int toChange = pagesOfTheSearch.get(page)+1;
+                    pagesOfTheSearch.put(page, toChange);
+                }
+                else pagesOfTheSearch.put(page, 1);
+            }
+        }
+        for (HashMap.Entry<Page, Integer> entry : pagesOfTheSearch.entrySet()){
+            int occurrences = entry.getValue();
+            if(occurrences == listOfWords.size()){
+                toReturn.add(entry.getKey());
+            }
+        }
+        return toReturn;
     }
 
     public List<Page> processQuery (String query) throws UnsupportedEncodingException {
@@ -42,7 +64,12 @@ public class QueryHandler {
         List<Page> listToReturn = new ArrayList<Page>();
         if(isSimpleWord(formatedQuery)){
             listToReturn=getMatchingPages(formatedQuery);
-        } 
+        }
+        if (!isSimpleWord(formatedQuery)){
+           listToReturn = getMatchinPagesMultipleWords(getWords(formatedQuery));
+        }
+
+
         return listToReturn;
     }
          
