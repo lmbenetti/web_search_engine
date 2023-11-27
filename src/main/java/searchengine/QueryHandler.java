@@ -20,8 +20,7 @@ public class QueryHandler {
     }
 
     public List<Page> getMatchingWebPages(String query) throws UnsupportedEncodingException {
-        String queryLowerCase = decodedQuery(query).toLowerCase();
-        queryLowerCase = queryLowerCase.trim();
+        String queryLowerCase = decodedQuery(query).toLowerCase().trim();
         List<Page> listToReturn = new ArrayList<Page>();
         if (webMapper.getWebMap().containsKey(queryLowerCase)){
             listToReturn = webMapper.getWebMap().get(queryLowerCase);
