@@ -92,4 +92,9 @@ public class WebServer {
   public void stopServer() {
     server.stop(0);
   }
+
+  public int getServerPort()
+  {
+    return server.getAddress().getPort();
+  }
 }
