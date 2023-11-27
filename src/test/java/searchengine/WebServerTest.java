@@ -17,7 +17,7 @@ import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class WebServerTest {
-    /* 
+    
     WebServer server = null;
 
     @BeforeAll
@@ -26,7 +26,7 @@ class WebServerTest {
             var rnd = new Random();
             while (server == null) {
                 try {
-                    server = new WebServer(rnd.nextInt(60000) + 1024, "data/test-file.txt");
+                    server = new WebServer("data/test-file.txt");
                 } catch (BindException e) {
                     // port in use. Try again
                 }
@@ -38,7 +38,7 @@ class WebServerTest {
 
     @AfterAll
     void tearDown() {
-        server.server.stop(0);
+        server.stop(0);
         server = null;
     }
 
@@ -66,6 +66,6 @@ class WebServerTest {
             return null;
         }
     }
-    */
+    
 }
 
