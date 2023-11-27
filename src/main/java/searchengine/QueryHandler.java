@@ -11,13 +11,12 @@ public class QueryHandler {
         webMapper = new WebMapper(fileName);
     }
 
-    public List <Page> getMatchingWebPages(String query) {
-        List <Page> listToReturn = new ArrayList<Page>();
+    public List<Page> getMatchingWebPages(String query) {
+        List<Page> listToReturn = new ArrayList<Page>();
         if (webMapper.getWebMap().containsKey(query)){
             listToReturn = webMapper.getWebMap().get(query);
             return listToReturn;
         }
-        else System.out.println("No web page contains the query word.");
         return listToReturn;
     }
 }
