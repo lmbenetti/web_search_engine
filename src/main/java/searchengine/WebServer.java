@@ -88,4 +88,8 @@ public class WebServer {
       e.printStackTrace();
     }
   }
+
+  public void stopServer() {
+    server.stop(0);
+  }
 }
