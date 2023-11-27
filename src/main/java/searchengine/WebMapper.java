@@ -39,12 +39,12 @@ public class WebMapper {
             List<String> lines = Files.readAllLines(Paths.get(filename));
             int lastIndex = lines.size();
             for (int i = lines.size() - 1; i >= 0; --i) {
-                if (lines.get(i).startsWith("*PAGE") && i+2 < lines.size()) {
-                    char[] nextLinesChars = {lines.get(i+1).charAt(0), lines.get(i+2).charAt(0)};
-                    if (Character.isUpperCase(nextLinesChars[0]) && Character.isLowerCase(nextLinesChars[1])) {
-                        pageList.add(new Page(lines.subList(i, lastIndex)));
-                        lastIndex = i;
+                if (lines.get(i).startsWith("*PAGE")) {
+                    List<String> webPage = lines.subList(i, lastIndex);
+                    if (webPage.size() > 2) {
+                        pageList.add(new Page(webPage));
                     }
+                    lastIndex = i;
                 }
             }
             return pageList;
