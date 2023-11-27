@@ -21,14 +21,14 @@ public class WebServer {
     queryHandler = new QueryHandler(filename);
   }
   
-  public void printServerMessage() {
+  private void printServerMessage() {
     String msg = " WebServer running on http://localhost:" + PORT + " ";
     System.out.println("╭"+"─".repeat(msg.length())+"╮");
     System.out.println("│"+msg+"│");
     System.out.println("╰"+"─".repeat(msg.length())+"╯");
   }
   
-  public void createServerContext() throws IOException {
+  private void createServerContext() throws IOException {
     server = HttpServer.create(new InetSocketAddress(PORT), BACKLOG);
     server.createContext("/", io -> respond(io, 200, "text/html", getFile("web/index.html")));
     server.createContext("/search", io -> generateSearchResults(io));
@@ -38,12 +38,11 @@ public class WebServer {
         "/code.js", io -> respond(io, 200, "application/javascript", getFile("web/code.js")));
     server.createContext(
         "/style.css", io -> respond(io, 200, "text/css", getFile("web/style.css")));
-    
     server.start();
       }
       
       
-  void generateSearchResults(HttpExchange io) {
+  private void generateSearchResults(HttpExchange io) {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
     ArrayList <String> response = new ArrayList<>();
     for (Page page : queryHandler.getMatchingWebPages(searchTerm)) {
