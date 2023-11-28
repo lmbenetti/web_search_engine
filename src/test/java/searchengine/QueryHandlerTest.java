@@ -123,7 +123,7 @@ public class QueryHandlerTest {
     @Test
     void ProcessQuery_CorrectInput_MultipleWords_(){
         try {
-            assertTrue(systemUnderTest.processQuery("man isle").isEmpty());
+            assertFalse(systemUnderTest.processQuery("man isle").isEmpty());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             System.out.println("Test for the word ' applo ' failed due to Exception. \nPlease check encoding of characters.");
