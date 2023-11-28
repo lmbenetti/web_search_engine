@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.HashSet;
 
+import java.io.IOException;
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class WebMapperTest {
@@ -32,7 +34,14 @@ public class WebMapperTest {
 
     @BeforeAll 
     void init(){
-    systemUnderTest_small = new WebMapper("data/enwiki-medium.txt");
+     try {
+        systemUnderTest_small = new WebMapper();
+     } catch (IOException e) {
+        e.printStackTrace();
+        System.out.println("Problem in config.txt");
+        
+     }   
+    
     }
 
     @Test
@@ -42,8 +51,9 @@ public class WebMapperTest {
 
     @Test
     void WebMapper_getWebMap_containsPage(){
-        assertEquals( Page.class, systemUnderTest_small.getWebMap().get("penis").get(0).getClass());
+        assertEquals( Page.class, systemUnderTest_small.getWebMap().get("bag").get(0).getClass());
     }
+    
 
     
 

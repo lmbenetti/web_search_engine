@@ -37,7 +37,7 @@ public class QueryHandler {
         ArrayList <String> listOfWords = new ArrayList<>(Arrays.asList(queryFormated.split(" ")));
         return listOfWords;
     }
-
+    /*Shouldn't multiple word searches return more pages than single word searches? */
     private ArrayList <Page> getMatchinPagesMultipleWords(ArrayList<String> listOfWords){
         ArrayList <Page> toReturn = new ArrayList<>();
         HashMap <Page, Integer> pagesOfTheSearch = new HashMap<>();
