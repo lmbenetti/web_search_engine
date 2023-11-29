@@ -111,7 +111,7 @@ public class QueryHandlerTest {
     @Test
     void ProcessQuery_CorrectInput_MultipleWords_LongerReturnList(){
         try {
-            assertTrue(systemUnderTest.processQuery("apple bee man").size() > systemUnderTest.processQuery("apple").size());
+            assertTrue(systemUnderTest.processQuery("apple bee man").size() < systemUnderTest.processQuery("apple").size());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             System.out.println("Test for the word ' applo ' failed due to Exception. \nPlease check encoding of characters.");

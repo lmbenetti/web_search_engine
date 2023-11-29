@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * The QueryHandler class handles the search queries.
@@ -47,42 +48,39 @@ public class QueryHandler {
         return (!decodedQuery(query).trim().contains(" ")); 
     }
 
+    //Returns pages mathing a word as a HashSet
     /**
      * Retrieves the list of pages that match the given query string.
      *
      * @param query A single word query string.
      * @return A list of Page objects that match the query string.
      */
-    private List <Page> getMatchingPages(String query){
-        List<Page> listToReturn = new ArrayList<Page>();
+    private List<Page> getMatchingPages(String query){
+        HashSet<Page> listToReturn = new HashSet<Page>();
         if (webMapper.getWebMap().containsKey(query)){
             listToReturn = webMapper.getWebMap().get(query);
         }
-        return listToReturn;
+        return PageRanker.rankPages("simplePageRanker", getWords(query), listToReturn);
     }
 
+    //Returns ArrayList of Words in query
     /**
      * Splits a query string into single words.
      *
      * @param query The query string to be split.
      * @return An ArrayList of all single words contained in the query string.
      */
-    private ArrayList <String> getWords(String query){
+    private List <String> getWords(String query){
         String queryFormated = query.replaceAll(" +", " ");
         ArrayList <String> listOfWords = new ArrayList<>(Arrays.asList(queryFormated.split(" ")));
         return listOfWords;
     }
 
-    /**
-     * Retrieves a list of pages that match with all words of a multi-word query.
-     *
-     * @param listOfWords An ArrayList of single words contained in a query string.
-     * @return An ArrayList of Page objects where each page matches all words in the query.
-     */
-    private ArrayList <Page> getMatchinPagesMultipleWords(ArrayList<String> listOfWords){
-          /*Shouldn't multiple word searches return more pages than single word searches? */
-        ArrayList <Page> toReturn = new ArrayList<>();
+    //MultiplewordSearch
+    private List<Page> getMatchinPagesMultipleWords(List<String> listOfWords){
+        HashSet<Page> toReturn = new HashSet<Page>();
         HashMap <Page, Integer> pagesOfTheSearch = new HashMap<>();
+
         for (String word : listOfWords){
             for (Page page : getMatchingPages(word)){
                 if (pagesOfTheSearch.containsKey(page)){
@@ -98,7 +96,7 @@ public class QueryHandler {
                 toReturn.add(entry.getKey());
             }
         }
-        return toReturn;
+        return PageRanker.rankPages("simplePageRanker", listOfWords, toReturn);
     }
 
     /**

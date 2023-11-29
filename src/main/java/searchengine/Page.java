@@ -9,10 +9,11 @@ import java.util.Set;
  * The Page class represents a web page and includes the relevant information about the web page.
  *
  */
-public class Page {
+public class Page implements Comparable<Page>{
     private String url, title;
     private HashMap<String, Integer> wordFrequency;
-    
+        private int pagerank;
+
     /**
      * Constructor for the Page class.
      * Initializes a new instance of a Page with its corresponding URL, title, and word frequency.
@@ -89,4 +90,21 @@ public class Page {
         }
         return wordFrequency.get(word);
     }
+
+    public void setRank(int rank){
+        this.pagerank = rank;
+    }
+
+    public int getRank()
+    {
+        return this.pagerank;
+    }
+
+    //simple implementation for the usecase of ranking webpages
+    //it is still too simple to actually be good
+    @Override
+    public int compareTo(Page otherPage) {
+        return Integer.compare(this.getRank(), otherPage.getRank());
+     }
+
 }

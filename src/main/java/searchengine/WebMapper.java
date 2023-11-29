@@ -1,5 +1,6 @@
 package searchengine;
 
+import java.util.HashSet;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.nio.file.Paths;
  * 
  */
 public class WebMapper {
-    private HashMap<String, List<Page>> webMap;
+    private HashMap<String, HashSet<Page>> webMap;
     private String fileName;
 
     /**
@@ -43,17 +44,17 @@ public class WebMapper {
      * @param filename The name of the file which contains the data.
      * @return A HashMap where each key is a word and each value is a list of pages which contain that word.
      */
-    private HashMap<String, List<Page>> makeWebMap(String filename){
-        HashMap<String, List<Page>> mapToReturn = new HashMap<>();
+    private HashMap<String, HashSet<Page>> makeWebMap(String filename){
+        HashMap<String, HashSet<Page>> mapToReturn = new HashMap<>();
         List<Page> pageList = getPages(filename);
         for (Page page : pageList) {
             for(String word : page.getWebSiteWords()){
                 if (mapToReturn.containsKey(word)){
-                    List<Page> pageToAdd = mapToReturn.get(word);
+                    HashSet<Page> pageToAdd = mapToReturn.get(word);
                     pageToAdd.add(page);
                     mapToReturn.put(word, pageToAdd);
                 }
-                else mapToReturn.put(word, new ArrayList<Page>(){{
+                else mapToReturn.put(word, new HashSet<Page>(){{
                     add(page);
                 }});
             }
@@ -98,7 +99,7 @@ public class WebMapper {
      *
      * @return A HashMap where each key is a word and each value is a list of pages containing that word.
      */
-    public HashMap<String, List<Page>> getWebMap() {
+    public HashMap<String, HashSet<Page>> getWebMap() {
         return webMap;
     }
 }
