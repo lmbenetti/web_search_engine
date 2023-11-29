@@ -38,8 +38,11 @@ public class PageRanker {
             page.setRank(rank);
         }    
 
-        List<Page> orderedList = new ArrayList<Page>(new TreeSet<Page>(pages));
+        System.out.println(pages.size());
+
+        List<Page> orderedList = new ArrayList<Page>(pages);
         Collections.reverse(orderedList);
+        
         return orderedList;
     }
 

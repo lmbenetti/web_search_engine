@@ -97,6 +97,7 @@ public class QueryHandler {
             }
         }
         return PageRanker.rankPages("simplePageRanker", listOfWords, toReturn);
+        //return new ArrayList<Page>(toReturn);
     }
 
     /**
