@@ -19,7 +19,7 @@ public class WebServer {
   private static final Charset CHARSET = StandardCharsets.UTF_8;
   private static int PORT = 8080;
   private HttpServer server;
-  private QueryHandler queryHandler;
+  private QueryHandlerTemp queryHandler;
 
   /**
    * Constructor for WebServer.
@@ -28,7 +28,7 @@ public class WebServer {
    * @throws IOException if there is an IO error when initializing the QueryHandler class.
    */
   public WebServer() throws IOException {
-    queryHandler = new QueryHandler();
+    queryHandler = new QueryHandlerTemp();
   }
 
   /**

@@ -1,6 +1,4 @@
 package searchengine;
-import java.util.List;
-import java.util.ArrayList;
 
 import java.io.IOException;
 
@@ -19,8 +17,5 @@ public class Main {
 
         WebServer webserver = new WebServer();
         webserver.runServer();
-
- 
-
     }
 }

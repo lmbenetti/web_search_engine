@@ -34,14 +34,7 @@ public class WebMapperTest {
 
     @BeforeAll 
     void init(){
-     try {
         systemUnderTest_small = new WebMapper();
-     } catch (IOException e) {
-        e.printStackTrace();
-        System.out.println("Problem in config.txt");
-        
-     }   
-    
     }
 
     @Test

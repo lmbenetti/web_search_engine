@@ -23,9 +23,15 @@ public class WebMapper {
      *
      * @param filename The name of the file which contains the data.
      */   
-    public WebMapper()throws IOException{
-        fileName = Files.readString(Paths.get("config.txt")).strip();
-        webMap = makeWebMap(fileName);
+    public WebMapper() {
+        try {
+            fileName = Files.readString(Paths.get("config.txt")).strip();
+            webMap = makeWebMap(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Please check config.txt for any errors");
+        }
+
     }
 
     /**
