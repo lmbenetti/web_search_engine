@@ -16,10 +16,10 @@ public class WebServer {
   private static final Charset CHARSET = StandardCharsets.UTF_8;
   private static int PORT = 8080;
   private HttpServer server;
-  private QueryHandler queryHandler;
+  private QueryHandlerTemp queryHandler;
 
   public WebServer() throws IOException {      
-    queryHandler = new QueryHandler();
+    queryHandler = new QueryHandlerTemp();
   }
   
   private void printServerMessage() {

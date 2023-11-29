@@ -1,0 +1,161 @@
+package searchengine;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.TestInstance.Lifecycle;
+
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+
+import java.util.List;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.HashSet;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class QueryhandlernewTest {
+    private Queryhandlernew systemUnderTest;
+    private WebMapper webMapHelper;
+
+    @BeforeAll 
+    void init(){
+
+            systemUnderTest = new Queryhandlernew();
+            webMapHelper = new WebMapper();
+
+    }
+
+
+
+    @Test
+    void ProcessQuery_CorrectInput_SimpleQuery(){
+        assertFalse(systemUnderTest.processQuery(" bag ").isEmpty());
+
+    }
+
+    @Test
+    void ProcessQuery_IncorrectInput_SimpleQuery(){
+        assertTrue(systemUnderTest.processQuery(" thiswordshouldnotexistinthedictionaryandshouldneverbesearchable ").isEmpty());
+
+    }
+
+    
+    /*we want this test to be true in the future, so let's keep up the good work */
+
+    /* 
+    @Test
+    void ProcessQuery_CorrectInput_SpecialCharacters(){
+        assertFalse(systemUnderTest.processQuery(" ?bag! ").isEmpty());
+    }
+
+    */
+
+    /* 
+    @Test
+    void ProcessQuery_CorrectInput_OneLetterOff(){
+        assertFalse(systemUnderTest.processQuery(" applo ").isEmpty());
+
+    }
+    */
+
+    @Test
+    void ProcessQuery_CorrectInput_CapitalLetter(){
+        assertFalse(systemUnderTest.processQuery(" Apple ").isEmpty());
+
+    }
+
+    @Test
+    void ProcessQuery_CorrectInput_MultipleWords_LongerReturnList(){
+        assertTrue(systemUnderTest.processQuery("sun united").size() < systemUnderTest.processQuery("united").size());
+
+    }
+
+
+    @Test
+    void ProcessQuery_CorrectInput_MultipleWords_(){
+        assertFalse(systemUnderTest.processQuery("man isle").isEmpty());
+    }
+
+    @Test
+    void ProcessQuery_CorrectInput_MultipleWords_Connected_Words(){
+        assertFalse(systemUnderTest.processQuery("fruit banana").isEmpty());
+    }
+
+    @Test
+    void getOrStrings_CorrectInput_complexQuery(){
+        String[] result = systemUnderTest.getOrSections("Husband or Wife");
+        assertEquals("Husband", result[0]);
+        assertEquals("Wife", result[1]);
+
+    }
+
+    @Test
+    void getOrStrings_CorrectInput_complexQuery2(){
+        String[] result = systemUnderTest.getOrSections("Husband or Wife or Daugther OR Son Or or");
+        assertEquals("Husband", result[0]);
+        assertEquals("Wife", result[1]);
+        assertEquals("Daugther", result[2]);
+        assertEquals("Son", result[3]);
+        assertEquals("or", result[4]);
+    }
+
+    @Test
+    void getOrStrings_CorrectInput_complexQuery3(){
+        String[] result = systemUnderTest.getOrSections("Husband Wife or Wife Husband or Brother Daugther OR Son Sister Or or no");
+        assertEquals("Husband Wife", result[0]);
+        assertEquals("Wife Husband", result[1]);
+        assertEquals("Brother Daugther", result[2]);
+        assertEquals("Son Sister", result[3]);
+        assertEquals("or no", result[4]);
+
+    }
+
+
+    //testing logicalAnd and logicalOr
+
+    @Test
+    void logicalAnd_CorrectInput_CorrectPostAnd(){
+        List<Set<Page>> testInput = new ArrayList<>();
+
+        testInput.add(webMapHelper.getWebMap().get("united"));
+        testInput.add(webMapHelper.getWebMap().get("states"));
+
+        assertFalse(systemUnderTest.logicalAnd(testInput).isEmpty());
+        assertTrue(systemUnderTest.logicalAnd(testInput).size() < testInput.get(1).size());
+
+    }
+
+    @Test
+    void logicalOr_CorrectInput_CorrectPostOr(){
+        List<Set<Page>> testInput = new ArrayList<>();
+
+        testInput.add(webMapHelper.getWebMap().get("united"));
+        testInput.add(webMapHelper.getWebMap().get("banana"));
+
+        assertFalse(systemUnderTest.logicalOr(testInput).isEmpty());
+        assertTrue(systemUnderTest.logicalOr(testInput).size() >= testInput.get(1).size());
+    }
+
+}
+

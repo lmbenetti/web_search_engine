@@ -13,9 +13,15 @@ public class WebMapper {
     private HashMap<String, HashSet<Page>> webMap;
     private String fileName;
 
-    public WebMapper()throws IOException{
-        fileName = Files.readString(Paths.get("config.txt")).strip();
-        webMap = makeWebMap(fileName);
+    public WebMapper() {
+        try {
+            fileName = Files.readString(Paths.get("config.txt")).strip();
+            webMap = makeWebMap(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Please check config.txt for any errors");
+        }
+
     }
 
     public void createInvertedIndex()throws IOException{

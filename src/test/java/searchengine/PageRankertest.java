@@ -33,12 +33,7 @@ public class PageRankertest {
 
     @BeforeAll 
     void init(){
-        try {
-            testMap = new WebMapper();
-        } catch (IOException e) {
-             e.printStackTrace();
-             System.out.println("Problem in config.txt");
-        }
+        testMap = new WebMapper();
     }
 
     @Test
