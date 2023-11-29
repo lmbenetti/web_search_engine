@@ -30,7 +30,7 @@ public class QueryHandlerTemp {
                 return getPagesSingleWordQuery(decodedQuery);
             }
 
-            return getPagesMuliWordQuery(decodedQuery);
+            return getPagesMultiWordQuery(decodedQuery);
 
             
 
@@ -61,7 +61,7 @@ public class QueryHandlerTemp {
 
     
 
-    List<Page> getPagesMuliWordQuery(String query){
+    List<Page> getPagesMultiWordQuery(String query){
         //the first goal is to get distinct and and or sections to parse-through
         //regex pattern for which is
         String[] orSections = getOrSections(query); 
@@ -97,7 +97,6 @@ public class QueryHandlerTemp {
     }
 
 
-
     Set<Page> logicalAnd(List<Set<Page>> andSets){
 
 
@@ -111,9 +110,6 @@ public class QueryHandlerTemp {
         return postAnd;
 
     }
-
-
-
 
     //Helpermethods (all package private for now)
 
