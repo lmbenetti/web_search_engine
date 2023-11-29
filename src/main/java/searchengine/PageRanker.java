@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Collections;
 
 public class PageRanker {
     
@@ -37,7 +38,9 @@ public class PageRanker {
             page.setRank(rank);
         }    
 
-        return new ArrayList<Page>(new TreeSet<Page>(pages));
+        List<Page> orderedList = new ArrayList<Page>(new TreeSet<Page>(pages));
+        Collections.reverse(orderedList);
+        return orderedList;
     }
 
 }
