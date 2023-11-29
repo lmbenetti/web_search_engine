@@ -21,20 +21,20 @@ public class PageRanker {
     
     }
 
-    private static List<Page> simplePageRanker(List<String> queries, Set<Page> Pages){
+    private static List<Page> simplePageRanker(List<String> queries, Set<Page> pages){
 
 
-        for(Page page: Pages){
+        for(Page page: pages){
             int rank = 0;
             for(String query : queries){
                 String[] splitQuery = query.split(" ");
                 for(String qWord: splitQuery){
-                    rank += page.getWordFrequency(qWord);
-
+                    int toAdd = page.getWordFrequency(qWord);
+                    rank += toAdd == -1? 0: toAdd;
                 }
             }
             page.setRank(rank);
-        }     
+        }    
         return new ArrayList<Page>();
     }
 
