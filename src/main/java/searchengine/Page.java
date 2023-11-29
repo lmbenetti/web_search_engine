@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Page {
+public class Page implements Comparable<Page>{
     private String url, title;
     private HashMap<String, Integer> wordFrequency;
     private int pagerank;
@@ -58,5 +58,16 @@ public class Page {
         this.pagerank = rank;
     }
 
+    public int getRank()
+    {
+        return this.pagerank;
+    }
+
+    //simple implementation for the usecase of ranking webpages
+    //it is still too simple to actually be good
+    @Override
+    public int compareTo(Page otherPage) {
+        return Integer.compare(this.getRank(), otherPage.getRank());
+     }
 
 }

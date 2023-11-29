@@ -3,6 +3,7 @@ package searchengine;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class PageRanker {
     
@@ -35,7 +36,8 @@ public class PageRanker {
             }
             page.setRank(rank);
         }    
-        return new ArrayList<Page>();
+
+        return new ArrayList<Page>(new TreeSet<Page>(pages));
     }
 
 }
