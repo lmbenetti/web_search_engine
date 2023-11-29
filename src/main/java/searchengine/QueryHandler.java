@@ -10,25 +10,51 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * The QueryHandler class handles the search queries.
+ */
 public class QueryHandler {
     private WebMapper webMapper;
     
-    //Constructor Class
+    /**
+     * Constructor for QueryHandler.
+     * Initializes the WebMapper.
+     *
+     * @throws IOException if there is an IO error during the initialization process.
+     */
     public QueryHandler() throws IOException {
         webMapper = new WebMapper();
     }
 
-    //Helper Method to decode query
+    /**
+     * Decodes the query string.
+     *
+     * @param originalQuery The URL encoded query string.
+     * @return The decoded query string.
+     * @throws UnsupportedEncodingException if the charset is not supported.
+     */
     private String decodedQuery(String originalQuery)throws UnsupportedEncodingException{
         return URLDecoder.decode(originalQuery, StandardCharsets.UTF_8.toString());
     }
 
-    //Boolean which tests if word is simple or not (one word search or multiple word search)
+    /**
+     * Checks if query string is a single word.
+     *
+     * @param query The query string to be checked.
+     * @return true if it is a single word and false if it is multiple words.
+     * @throws UnsupportedEncodingException if the charset is not supported.
+     */
     private boolean isSimpleWord(String query) throws UnsupportedEncodingException{
         return (!decodedQuery(query).trim().contains(" ")); 
     }
 
     //Returns pages mathing a word as a HashSet
+    /**
+     * Retrieves the list of pages that match the given query string.
+     *
+     * @param query A single word query string.
+     * @return A list of Page objects that match the query string.
+     */
     private List<Page> getMatchingPages(String query){
         HashSet<Page> listToReturn = new HashSet<Page>();
         if (webMapper.getWebMap().containsKey(query)){
@@ -38,6 +64,12 @@ public class QueryHandler {
     }
 
     //Returns ArrayList of Words in query
+    /**
+     * Splits a query string into single words.
+     *
+     * @param query The query string to be split.
+     * @return An ArrayList of all single words contained in the query string.
+     */
     private List <String> getWords(String query){
         String queryFormated = query.replaceAll(" +", " ");
         ArrayList <String> listOfWords = new ArrayList<>(Arrays.asList(queryFormated.split(" ")));
@@ -67,6 +99,13 @@ public class QueryHandler {
         return PageRanker.rankPages("simplePageRanker", listOfWords, toReturn);
     }
 
+    /**
+     * Processes a query string, decodes it, and retrieves the matching pages accordingly for both single- and multi-word queries.
+     *
+     * @param query The query string.
+     * @return A list of Page objects where each page matches all words in the query.
+     * @throws UnsupportedEncodingException if the charset is not supported.
+     */
     public List<Page> processQuery (String query) throws UnsupportedEncodingException {
         String formatedQuery = decodedQuery(query).toLowerCase().trim();
         List<Page> listToReturn = new ArrayList<Page>();
@@ -76,7 +115,6 @@ public class QueryHandler {
         if (!isSimpleWord(formatedQuery)){
            listToReturn = getMatchinPagesMultipleWords(getWords(formatedQuery));
         }
-
 
         return listToReturn;
     }

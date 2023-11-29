@@ -5,17 +5,33 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * The Page class represents a web page and includes the relevant information about the web page.
+ *
+ */
 public class Page implements Comparable<Page>{
     private String url, title;
     private HashMap<String, Integer> wordFrequency;
-    private int pagerank;
+        private int pagerank;
 
+    /**
+     * Constructor for the Page class.
+     * Initializes a new instance of a Page with its corresponding URL, title, and word frequency.
+     *
+     * @param webPage A list of strings representing the content of the Page.
+     */
     public Page(List<String> webPage) {
         this.url = webPage.get(0).substring(6);
         this.title = webPage.get(1);
         this.wordFrequency = getWord(webPage);
     }
 
+    /**
+     * Counts the frequency of words on the Page.
+     * 
+     * @param webPage A list of strings representing the content of the Page.
+     * @return A HashMap using words as keys and their corresponding frequency as values.
+     */
     private HashMap<String, Integer> getWord(List<String> webPage) {
         HashMap<String, Integer> words =  new HashMap<String, Integer>();
         Iterator<String> itr = webPage.iterator();
@@ -35,18 +51,39 @@ public class Page implements Comparable<Page>{
         return words;
     }
 
+    /**
+     * Retrieves the URL of the Page.
+     *
+     * @return The String value of the URL of the Page.
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Retrieves the title of the Page.
+     *
+     * @return The String value of the title of the Page.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Retrieves the words present on the Page.
+     *
+     * @return A Set of strings containing all words found on the Page.
+     */
     public Set<String> getWebSiteWords(){
         return wordFrequency.keySet();
     }
     
+    /**
+     * Retrieves the frequency of a given word on the Page.
+     *
+     * @param word The word which frequency is to be retrieved.
+     * @return The integer value of the frequency of the given word. Returns -1 if the word was not found.
+     */
     public Integer getWordFrequency(String word){
         if (!wordFrequency.containsKey(word)){
             return -1;
