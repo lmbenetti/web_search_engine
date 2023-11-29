@@ -1,6 +1,5 @@
-
-
 package searchengine;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -23,7 +22,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class WebServerTest {
-    
+
     WebServer server = null;
 
     @BeforeEach
