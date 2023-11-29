@@ -8,6 +8,7 @@ import java.util.Set;
 public class Page {
     private String url, title;
     private HashMap<String, Integer> wordFrequency;
+    private int pagerank;
 
     public Page(List<String> webPage) {
         this.url = webPage.get(0).substring(6);
@@ -52,4 +53,10 @@ public class Page {
         }
         return wordFrequency.get(word);
     }
+
+    public void setRank(int rank){
+        this.pagerank = rank;
+    }
+
+
 }
