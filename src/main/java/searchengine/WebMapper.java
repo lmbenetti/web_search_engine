@@ -9,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * The WebMapper class maps web pages to their corresponding URLs.
  * 
@@ -107,5 +110,20 @@ public class WebMapper {
      */
     public HashMap<String, HashSet<Page>> getWebMap() {
         return webMap;
+    }
+
+    /**
+     * Retrieves a Set<Page>-object relating to the passed argument query.
+     * 
+     * 
+     * @param query
+     * @return Returns a clone of a Set intance containing Page-instances relating to the query-word through the HashMap field of the class. If no Set is matched, an empty set is retrieved.
+     */
+    public Set<Page> getPageSet(String query){
+
+        if(!webMap.containsKey(query)){
+            return new HashSet<Page>();
+        }
+        return webMap.get(query).stream().collect(Collectors.toSet()); 
     }
 }

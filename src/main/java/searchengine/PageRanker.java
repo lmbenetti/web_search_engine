@@ -37,8 +37,6 @@ public class PageRanker {
             page.setRank(rank);
         }    
 
-        System.out.println(pages.size());
-
         List<Page> orderedList = new ArrayList<Page>(pages);
         Collections.reverse(orderedList);
 

@@ -94,7 +94,7 @@ public class QueryhandlernewTest {
 
     @Test
     void ProcessQuery_CorrectInput_MultipleWords_(){
-        assertFalse(systemUnderTest.processQuery("man isle").isEmpty());
+        assertFalse(systemUnderTest.processQuery("man woman").isEmpty());
     }
 
     @Test
@@ -155,6 +155,22 @@ public class QueryhandlernewTest {
 
         assertFalse(systemUnderTest.logicalOr(testInput).isEmpty());
         assertTrue(systemUnderTest.logicalOr(testInput).size() >= testInput.get(1).size());
+    }
+
+    @Test
+    void processQuery_multipleCalls_sameOutput(){
+        int one = systemUnderTest.processQuery("man woman").size();
+        systemUnderTest.processQuery("woman man");
+        int two = systemUnderTest.processQuery("man woman").size();
+        assertEquals(one, two);
+    }
+
+    @Test
+    void getPagesMultiWordQuery_multipleCalls_sameOutput(){
+        int one = systemUnderTest.getPagesMultiWordQuery("man woman").size();
+        systemUnderTest.getPagesMultiWordQuery("woman man");
+        int two = systemUnderTest.getPagesMultiWordQuery("man woman").size();
+        assertEquals(one, two);
     }
 
 }

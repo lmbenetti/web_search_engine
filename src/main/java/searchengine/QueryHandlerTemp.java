@@ -29,11 +29,7 @@ public class QueryHandlerTemp {
             if(isSimpleWord(decodedQuery)){
                 return getPagesSingleWordQuery(decodedQuery);
             }
-
             return getPagesMultiWordQuery(decodedQuery);
-
-            
-
         }
         //if process query returns empty pagelist, we should print something to screen
         return new ArrayList<Page>();
@@ -59,30 +55,28 @@ public class QueryHandlerTemp {
         return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), listToReturn);
     }
 
-    
+    List<Page>getPagesMultiWordQuery(String query){
+        //step 1: parse string for operations
 
-    List<Page> getPagesMultiWordQuery(String query){
-        //the first goal is to get distinct and and or sections to parse-through
-        //regex pattern for which is
-        String[] orSections = getOrSections(query); 
+        String[] orSections = getOrSections(query);
+        String[] andSection;
 
-        //List<Set<Page>> reflects and while List<List<Set<Page>>> reflects or
-        List<Set<Page>> decompressedOrQuery = new ArrayList<Set<Page>>();
 
-        for(int x = 0; x < orSections.length; x++){
+        List<Set<Page>> orSets = new ArrayList<Set<Page>>();
+        List<Set<Page>> andSets = new ArrayList<Set<Page>>();
 
-            String[] andSections = orSections[x].split(" ");
-            List<Set<Page>> decompressedAndQuery = new ArrayList<Set<Page>>();
+        for(int o = 0; o  < orSections.length; o++){
 
-            for(int y = 0; y < andSections.length; y++){
-                decompressedAndQuery.add(webMap.getWebMap().get(andSections[y]));
+            andSection = orSections[o].split(" +");
+            for(int a = 0; a< andSection.length; a++){
+                andSets.add(webMap.getPageSet(andSection[a]));
             }
-
-            decompressedOrQuery.add(logicalAnd(decompressedAndQuery));
-
+            orSets.add(logicalAnd(andSets));
+            andSets.clear();
         }
 
-        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))),  logicalOr(decompressedOrQuery));
+        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), logicalOr(orSets));
+
     }
 
     Set<Page> logicalOr(List<Set<Page>> orSets){
@@ -96,9 +90,7 @@ public class QueryHandlerTemp {
         return postOr;
     }
 
-
     Set<Page> logicalAnd(List<Set<Page>> andSets){
-
 
         Iterator<Set<Page>> itr = andSets.iterator();
         Set<Page> postAnd = itr.next();
@@ -125,14 +117,15 @@ public class QueryHandlerTemp {
 
     //Boolean which tests if word is simple or not (one word search or multiple word search)
     private boolean isSimpleWord(String query){
-        return (!decodeQuery(query).trim().contains(" ")); 
+        return (!query.trim().contains(" ")); 
 
 
     }
 
     String[] getOrSections(String query){
-        Pattern pattern = Pattern.compile(" (or) ", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("\\b\\s+or\\s+\\b", Pattern.CASE_INSENSITIVE);
         return pattern.split(query);
     }
+    
 }
 

@@ -77,7 +77,7 @@ public class QueryHandler {
     }
 
     //MultiplewordSearch
-    private List<Page> getMatchinPagesMultipleWords(List<String> listOfWords){
+    private List<Page> getMatchingPagesMultipleWords(List<String> listOfWords){
         HashSet<Page> toReturn = new HashSet<Page>();
         HashMap <Page, Integer> pagesOfTheSearch = new HashMap<>();
 
@@ -114,7 +114,7 @@ public class QueryHandler {
             listToReturn=getMatchingPages(formatedQuery);
         }
         if (!isSimpleWord(formatedQuery)){
-           listToReturn = getMatchinPagesMultipleWords(getWords(formatedQuery));
+           listToReturn = getMatchingPagesMultipleWords(getWords(formatedQuery));
         }
 
         return listToReturn;
