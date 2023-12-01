@@ -76,7 +76,12 @@ public class QueryHandler {
         return listOfWords;
     }
 
-    //MultiplewordSearch
+     /**
+     * Retrieves a list of pages that match with all words of a multi-word query.
+     *
+     * @param listOfWords An ArrayList of single words contained in a query string.
+     * @return An ArrayList of Page objects where each page matches all words in the query.
+     */
     private List<Page> getMatchinPagesMultipleWords(List<String> listOfWords){
         HashSet<Page> toReturn = new HashSet<Page>();
         HashMap <Page, Integer> pagesOfTheSearch = new HashMap<>();
