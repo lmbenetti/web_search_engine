@@ -17,7 +17,7 @@ public class QueryHandlerTemp {
 
 
     public QueryHandlerTemp() {
-            webMap = new WebMapper();
+        webMap = new WebMapper();
     }
 
 
@@ -35,13 +35,15 @@ public class QueryHandlerTemp {
         return new ArrayList<Page>();
     }
 
-    
-    //toAdd (we want to avoid raising exceptions, so we check once before we process any query !) (it is also a requirement for the exam)
-    boolean validateQuery(String query)
-    {
-        return true;
+    boolean validateQuery(String query) {
+        // check that query has content
+        if (query == null || query.trim().isEmpty()) {
+            return false;
+        }
+        // check for minimum 1 letter and that is not just single special character
+        String regex = ".*[a-z]+.*";
+        return query.matches(regex);
     }
-
     
     //Returns pages mathing a word as a HashSet
     List<Page> getPagesSingleWordQuery(String query){

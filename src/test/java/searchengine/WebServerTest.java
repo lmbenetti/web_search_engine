@@ -50,7 +50,8 @@ class WebServerTest {
 
     @Test
     void WebServer_getServerPort_isValidPort(){
-        assertTrue(server.getServerPort() == 8080, "Server Port is not standard port");
+        assertTrue(server.getServerState(), "Server not running");
+        assertEquals(8080, server.getServerPort(), "Server Port is not standard port");
     }
 
     @Test 

@@ -48,6 +48,8 @@ public class QueryHandlerTest {
 
     }
 
+    
+
     @Test
     void ProcessQuery_CorrectInput_SimpleQuery(){
         try {
