@@ -7,6 +7,14 @@ import java.util.Collections;
 
 public class PageRanker {
     
+    
+    /** 
+     * A Static method which applies one of multiple ranking algorithms depending on the querytype argument. 
+     * @param queryType A string reflecting the applied ranking algorithm.
+     * @param queries A list of strings reflecting the search-words from the query.
+     * @param pages An unordered set of pages to be ranked.
+     * @return An ordered list of pages is returned based on the queries and unordered set of pages provides.
+     */
     public static List<Page> rankPages(String queryType, List<String> queries, Set<Page> pages) {
         List<Page> orderedList;
         switch(queryType) {
@@ -22,6 +30,14 @@ public class PageRanker {
     
     }
 
+    
+    
+    /** 
+     * A simple ranking algorithm which takes a list of query-strings and an unordered set of pages and returns an ordered list of pages. The ranking is only based on the frequency of words in a given website.
+     * @param queries A list of strings reflecting the search-words from the query.
+     * @param pages An unordered set of pages to be ranked.
+     * @return An ordered List<Page>-object is returned. 
+     */
     private static List<Page> simplePageRanker(List<String> queries, Set<Page> pages){
 
 
