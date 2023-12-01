@@ -22,14 +22,19 @@ public class Page implements Comparable<Page>{
      */
     public Page(List<String> webPage) {
         
-        checkPageData(webPage);
+        validateData(webPage);
         this.url = webPage.get(0).substring(6);
         this.title = webPage.get(1);
         this.wordFrequency = getWord(webPage);
         this.pagerank = 0;
     }
 
-    private void checkPageData(List<String> webPage) {
+    /**
+     * Validates the input parameter of the constructor
+     *
+     * @param webPage A list of strings representing the content of the Page.
+     */
+    private void validateData(List<String> webPage) {
         if (webPage == null || webPage.size() < 2) {
             throw new IllegalArgumentException("missing page data");
         }
