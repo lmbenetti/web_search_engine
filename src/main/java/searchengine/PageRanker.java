@@ -43,4 +43,11 @@ public class PageRanker {
         return orderedList;
     }
 
+
+    private static List<Page> titlePageRanker(List<String> queries, Set<Page> pages){
+
+
+        return new ArrayList<Page>();
+    }
+
 }
