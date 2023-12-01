@@ -17,16 +17,13 @@ public class QueryHandlerTemp {
 
 
     public QueryHandlerTemp() {
-            webMap = new WebMapper();
+        webMap = new WebMapper();
     }
 
 
     public List<Page> processQuery(String query)
     {
         String decodedQuery = decodeQuery(query).toLowerCase().trim();
-
-        System.out.println(decodedQuery);
-        System.out.println(validateQuery(decodedQuery));
 
         if(validateQuery(decodedQuery)){
             if(isSimpleWord(decodedQuery)){

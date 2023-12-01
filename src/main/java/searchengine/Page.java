@@ -14,8 +14,6 @@ public class Page implements Comparable<Page>{
     private HashMap<String, Integer> wordFrequency;
     private int pagerank;
 
-
-
     /**
      * Constructor for the Page class.
      * Initializes a new instance of a Page with its corresponding URL, title, and word frequency.
@@ -23,9 +21,18 @@ public class Page implements Comparable<Page>{
      * @param webPage A list of strings representing the content of the Page.
      */
     public Page(List<String> webPage) {
+        
+        checkPageData(webPage);
         this.url = webPage.get(0).substring(6);
         this.title = webPage.get(1);
         this.wordFrequency = getWord(webPage);
+        this.pagerank = 0;
+    }
+
+    private void checkPageData(List<String> webPage) {
+        if (webPage == null || webPage.size() < 2) {
+            throw new IllegalArgumentException("missing page data");
+        }
     }
 
     /**
