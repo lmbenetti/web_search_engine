@@ -23,7 +23,7 @@ public class Page implements Comparable<Page>{
     public Page(List<String> webPage) {
         
         validateData(webPage);
-        this.url = webPage.get(0).substring(6);
+        this.url = findUrl(webPage.get(0));
         this.title = webPage.get(1);
         this.wordFrequency = getWord(webPage);
         this.pagerank = 0;
@@ -72,6 +72,19 @@ public class Page implements Comparable<Page>{
      */
     public String getUrl() {
         return url;
+    }
+
+    /**
+     * Extracts the URL from the first line of the Page.
+     *
+     * @return The String value of the URL of the Page.
+     */
+    private String findUrl(String firstLine) {
+        int prefixLength = 6;
+        if (firstLine.length() <= prefixLength) {
+            throw new IllegalArgumentException("wrong data format");
+        }
+        return firstLine.substring(prefixLength);
     }
 
     /**
