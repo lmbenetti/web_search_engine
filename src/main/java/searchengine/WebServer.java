@@ -19,16 +19,18 @@ public class WebServer {
   private static final Charset CHARSET = StandardCharsets.UTF_8;
   private static int PORT = 8080;
   private HttpServer server;
-  private QueryHandler queryHandler;
+  private QueryHandlerTemp queryHandler;
+  private boolean isRunning;
 
   /**
    * Constructor for WebServer.
-   * It creates an instance of the QueryHandler class.
+   * It creates an instance of the QueryHandler class and initializes the isRunning variable.
    *
    * @throws IOException if there is an IO error when initializing the QueryHandler class.
    */
   public WebServer() throws IOException {
-    queryHandler = new QueryHandler();
+    queryHandler = new QueryHandlerTemp();
+    isRunning = false;
   }
 
   /**
@@ -116,6 +118,7 @@ public class WebServer {
    */
   public void runServer() {
     try {
+      isRunning = true;
       createServerContext();
       printServerMessage();
     } catch (IOException e) {
@@ -127,7 +130,17 @@ public class WebServer {
    * Stops server.
    */
   public void stopServer() {
+    isRunning = false;
     server.stop(0);
+  }
+
+  /**
+   * Retrieves the state of the server.
+   * 
+   * @return a boolean value representing if the server is currently running or not.
+   */
+  public boolean getServerState() {
+    return isRunning;
   }
 
   /**

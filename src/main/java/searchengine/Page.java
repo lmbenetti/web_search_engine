@@ -12,7 +12,9 @@ import java.util.Set;
 public class Page implements Comparable<Page>{
     private String url, title;
     private HashMap<String, Integer> wordFrequency;
-        private int pagerank;
+    private int pagerank;
+
+
 
     /**
      * Constructor for the Page class.
@@ -106,5 +108,45 @@ public class Page implements Comparable<Page>{
     public int compareTo(Page otherPage) {
         return Integer.compare(this.getRank(), otherPage.getRank());
      }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((url == null) ? 0 : url.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + ((wordFrequency == null) ? 0 : wordFrequency.hashCode());
+        result = prime * result + pagerank;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Page other = (Page) obj;
+        if (url == null) {
+            if (other.url != null)
+                return false;
+        } else if (!url.equals(other.url))
+            return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        if (wordFrequency == null) {
+            if (other.wordFrequency != null)
+                return false;
+        } else if (!wordFrequency.equals(other.wordFrequency))
+            return false;
+        if (pagerank != other.pagerank)
+            return false;
+        return true;
+    }
 
 }
