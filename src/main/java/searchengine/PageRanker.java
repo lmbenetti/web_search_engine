@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class PageRanker {
     
@@ -21,6 +22,9 @@ public class PageRanker {
             case "simplePageRanker":
               orderedList = simplePageRanker(queries, pages);
               break;
+              case "titlePageRanker":
+                orderedList = titlePageRanker(queries, pages);
+                break;
             default:
                 orderedList = new ArrayList<Page>();
               // code block
@@ -59,11 +63,25 @@ public class PageRanker {
         return orderedList;
     }
 
-
     private static List<Page> titlePageRanker(List<String> queries, Set<Page> pages){
+        for(Page page: pages){
+            int rank = 0;
+            for(String query : queries){
+                String[] splitQuery = query.split(" ");
+                for(String qWord: splitQuery){
+                    if(page.getTitle().toLowerCase().contains(qWord.toLowerCase())){
+                        rank++;
+                    }
+                }
+            }
+            page.setRank(rank);
+        }
+        
+        List<Page> orderedList = new ArrayList<Page>(pages);
+        orderedList.sort(Comparator.comparingInt(Page::getRank).reversed());
 
-
-        return new ArrayList<Page>();
+        return orderedList;
     }
+
 
 }
