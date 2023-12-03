@@ -1,0 +1,76 @@
+@startuml
+
+class Main {
+    +main(String... args): void
+}
+
+class WebServer {
+    -PORT: int
+    -server: HttpServer
+    -queryHandler: QueryHandlerTemp
+    -serverState: boolean
+    +WebServer()
+    -printServerMessage()
+    -createServerContext()
+    -generateSearchResults(HttpExchange)
+    -getFile(String): byte[]
+    -respond(HttpExchange, int, String, byte[])
+    +runServer()
+    +stopServer()
+    +getServerState(): boolean
+    +getServerPort(): int
+}
+
+class QueryHandlerTemp {
+    -webMap: WebMapper
+    +QueryHandlerTemp()
+    +processQuery(String): List<Page>
+    -validateQuery(String): boolean
+    -getPagesSingleWordQuery(String): List<Page>
+    -getPagesMultiWordQuery(String): List<Page>
+    -logicalOr(List<Set<Page>>): Set<Page>
+    -logicalAnd(List<Set<Page>>): Set<Page>
+    -decodeQuery(String): String
+    -isSimpleWord(String): boolean
+    -getOrSections(String): String[]
+}
+
+class WebMapper {
+    -webMap: HashMap<String, HashSet<Page>>
+    -fileName: String
+    +WebMapper()
+    +createInvertedIndex()
+    +getWebMap(): HashMap<String, HashSet<Page>>
+    +getPageSet(String): Set<Page>
+}
+
+class Page implements Comparable {
+    -url: String
+    -title: String
+    -wordFrequency: HashMap<String, Integer>
+    -pagerank: int
+    +Page(List<String> webPage)
+    +getUrl(): String
+    +getTitle(): String
+    +getWebSiteWords(): Set<String>
+    +getWordFrequency(String): Integer
+    +setRank(int): void
+    +getRank(): int
+    +compareTo(Page): int
+    +hashCode(): int
+    +equals(Object): boolean
+}
+
+class PageRanker {
+    +rankPages(String, List<String>, Set<Page>): List<Page>
+    -simplePageRanker(List<String>, Set<Page>): List<Page>
+    -titlePageRanker(List<String>, Set<Page>): List<Page>
+}
+
+Main --> WebServer : uses >
+WebServer --> QueryHandlerTemp : uses >
+QueryHandlerTemp --> WebMapper : uses >
+WebMapper --> Page : uses >
+PageRanker --> Page : uses >
+
+@enduml
