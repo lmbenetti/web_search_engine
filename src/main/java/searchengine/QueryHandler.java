@@ -1,128 +1,133 @@
 package searchengine;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Iterator;
 
-/**
- * The QueryHandler class handles the search queries.
- */
+import java.util.regex.Pattern;
+
 public class QueryHandler {
-    private WebMapper webMapper;
+    private WebMapper webMap;
+
+
+    public QueryHandler() {
+        webMap = new WebMapper();
+    }
+
+
+    public List<Page> processQuery(String query)
+    {
+        String decodedQuery = decodeQuery(query).toLowerCase().trim();
+
+        if(validateQuery(decodedQuery)){
+            if(isSimpleWord(decodedQuery)){
+                return getPagesSingleWordQuery(decodedQuery);
+            }
+            return getPagesMultiWordQuery(decodedQuery);
+        }
+        //if process query returns empty pagelist, we should print something to screen
+        return new ArrayList<Page>();
+    }
+
+    boolean validateQuery(String query) {
+        // check that query has content
+        if (query == null || query.trim().isEmpty()) {
+            return false;
+        }
+        // check for minimum 1 letter and that is not just single special character
+        String regex = ".*[a-z]+.*";
+        return query.matches(regex);
+    }
     
-    /**
-     * Constructor for QueryHandler.
-     * Initializes the WebMapper.
-     *
-     * @throws IOException if there is an IO error during the initialization process.
-     */
-    public QueryHandler() throws IOException {
-        webMapper = new WebMapper();
-    }
-
-    /**
-     * Decodes the query string.
-     *
-     * @param originalQuery The URL encoded query string.
-     * @return The decoded query string.
-     * @throws UnsupportedEncodingException if the charset is not supported.
-     */
-    private String decodedQuery(String originalQuery)throws UnsupportedEncodingException{
-        return URLDecoder.decode(originalQuery, StandardCharsets.UTF_8.toString());
-    }
-
-    /**
-     * Checks if query string is a single word.
-     *
-     * @param query The query string to be checked.
-     * @return true if it is a single word and false if it is multiple words.
-     * @throws UnsupportedEncodingException if the charset is not supported.
-     */
-    private boolean isSimpleWord(String query) throws UnsupportedEncodingException{
-        return (!decodedQuery(query).trim().contains(" ")); 
-    }
-
     //Returns pages mathing a word as a HashSet
-    /**
-     * Retrieves the list of pages that match the given query string.
-     *
-     * @param query A single word query string.
-     * @return A list of Page objects that match the query string.
-     */
-    private List<Page> getMatchingPages(String query){
+    List<Page> getPagesSingleWordQuery(String query){
+
         HashSet<Page> listToReturn = new HashSet<Page>();
-        if (webMapper.getWebMap().containsKey(query)){
-            listToReturn = webMapper.getWebMap().get(query);
+
+        //refactor so WebMapper takes care of everything locally (no need to call .getWebMap)
+        if (webMap.getWebMap().containsKey(query)){
+            listToReturn = webMap.getWebMap().get(query);
         }
-        return PageRanker.rankPages("simplePageRanker", getWords(query), listToReturn);
+        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), listToReturn);
     }
 
-    //Returns ArrayList of Words in query
-    /**
-     * Splits a query string into single words.
-     *
-     * @param query The query string to be split.
-     * @return An ArrayList of all single words contained in the query string.
-     */
-    private List <String> getWords(String query){
-        String queryFormated = query.replaceAll(" +", " ");
-        ArrayList <String> listOfWords = new ArrayList<>(Arrays.asList(queryFormated.split(" ")));
-        return listOfWords;
-    }
+    List<Page>getPagesMultiWordQuery(String query){
+        //step 1: parse string for operations
 
-     /**
-     * Retrieves a list of pages that match with all words of a multi-word query.
-     *
-     * @param listOfWords An ArrayList of single words contained in a query string.
-     * @return An ArrayList of Page objects where each page matches all words in the query.
-     */
-    private List<Page> getMatchingPagesMultipleWords(List<String> listOfWords){
-        HashSet<Page> toReturn = new HashSet<Page>();
-        HashMap <Page, Integer> pagesOfTheSearch = new HashMap<>();
+        String[] orSections = getOrSections(query);
+        String[] andSection;
 
-        for (String word : listOfWords){
-            for (Page page : getMatchingPages(word)){
-                if (pagesOfTheSearch.containsKey(page)){
-                    int toChange = pagesOfTheSearch.get(page)+1;
-                    pagesOfTheSearch.put(page, toChange);
-                }
-                else pagesOfTheSearch.put(page, 1);
+
+        List<Set<Page>> orSets = new ArrayList<Set<Page>>();
+        List<Set<Page>> andSets = new ArrayList<Set<Page>>();
+
+        for(int o = 0; o  < orSections.length; o++){
+
+            andSection = orSections[o].split(" +");
+            for(int a = 0; a< andSection.length; a++){
+                andSets.add(webMap.getPageSet(andSection[a]));
             }
-        }
-        for (HashMap.Entry<Page, Integer> entry : pagesOfTheSearch.entrySet()){
-            int occurrences = entry.getValue();
-            if(occurrences == listOfWords.size()){
-                toReturn.add(entry.getKey());
-            }
-        }
-        return PageRanker.rankPages("simplePageRanker", listOfWords, toReturn);
-        //return new ArrayList<Page>(toReturn);
-    }
-
-    /**
-     * Processes a query string, decodes it, and retrieves the matching pages accordingly for both single- and multi-word queries.
-     *
-     * @param query The query string.
-     * @return A list of Page objects where each page matches all words in the query.
-     * @throws UnsupportedEncodingException if the charset is not supported.
-     */
-    public List<Page> processQuery (String query) throws UnsupportedEncodingException {
-        String formatedQuery = decodedQuery(query).toLowerCase().trim();
-        List<Page> listToReturn = new ArrayList<Page>();
-        if(isSimpleWord(formatedQuery)){
-            listToReturn=getMatchingPages(formatedQuery);
-        }
-        if (!isSimpleWord(formatedQuery)){
-           listToReturn = getMatchingPagesMultipleWords(getWords(formatedQuery));
+            orSets.add(logicalAnd(andSets));
+            andSets.clear();
         }
 
-        return listToReturn;
+        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), logicalOr(orSets));
+
     }
-         
+
+    Set<Page> logicalOr(List<Set<Page>> orSets){
+
+        Set<Page> postOr = new HashSet<Page>();
+
+        for(Set<Page> pageSet : orSets){
+            postOr.addAll(pageSet);
+        }
+
+        return postOr;
+    }
+
+    Set<Page> logicalAnd(List<Set<Page>> andSets){
+
+        Iterator<Set<Page>> itr = andSets.iterator();
+        Set<Page> postAnd = itr.next();
+
+        while(itr.hasNext()){
+            postAnd.retainAll(itr.next());
+        }
+
+        return postAnd;
+
+    }
+
+    //Helpermethods (all package private for now)
+
+    String decodeQuery(String originalQuery){
+        try {
+            return URLDecoder.decode(originalQuery, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            System.out.println("The query from the webpage was faulty");
+            return "";
+        }
+    }
+
+    //Boolean which tests if word is simple or not (one word search or multiple word search)
+    private boolean isSimpleWord(String query){
+        return (!query.trim().contains(" ")); 
+
+
+    }
+
+    String[] getOrSections(String query){
+        Pattern pattern = Pattern.compile("\\b\\s+or\\s+\\b", Pattern.CASE_INSENSITIVE);
+        return pattern.split(query);
+    }
+    
 }
+

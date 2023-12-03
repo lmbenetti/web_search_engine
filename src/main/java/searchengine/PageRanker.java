@@ -27,7 +27,6 @@ public class PageRanker {
                 break;
             default:
                 orderedList = new ArrayList<Page>();
-              // code block
           }
           
         return orderedList;
