@@ -35,6 +35,13 @@ public class QueryHandler {
         return new ArrayList<Page>();
     }
 
+    
+    /** 
+     * A method that checks wheter the user input is a valid query or no. To decide that it checks if
+     * it is not empty abd if it contains at least one letter and not just a single special character.
+     * @param query A String that contains what the user has typed in the search block. 
+     * @return boolean Returns true if the query is valid or false if it is not.
+     */
     boolean validateQuery(String query) {
         // check that query has content
         if (query == null || query.trim().isEmpty()) {
