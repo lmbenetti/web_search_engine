@@ -1,6 +1,8 @@
 package searchengine;
 
 import java.util.HashSet;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +44,7 @@ public class WebMapper {
      *
      * @throws IOException if there is an IO error when reading the file.
      */
-    public void createInvertedIndex()throws IOException{
+    public void createInvertedIndex() throws IOException {
         webMap = makeWebMap(fileName);
     }
 
@@ -80,19 +82,28 @@ public class WebMapper {
     private List<Page> getPages(String filename) {
         try {
             List<Page> pageList = new ArrayList<>();
-            List<String> lines = Files.readAllLines(Paths.get(filename));
-            int lastIndex = lines.size();
-            for (int i = lines.size() - 1; i >= 0; --i) {
-                if (lines.get(i).startsWith("*PAGE")) {
-                    List<String> webPage = lines.subList(i, lastIndex);
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            List<String> webPage = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("*PAGE")) {
                     if (webPage.size() > 2) {
                         pageList.add(new Page(webPage));
+                        webPage.clear();
                     }
-                    lastIndex = i;
+                    else if (webPage.size() > 0) {
+                        webPage.clear();
+                    }
                 }
+                webPage.add(line);
             }
+            if (webPage.size() > 2) {
+                pageList.add(new Page(webPage));
+            }
+            reader.close();
             return pageList;
         }
+        
         catch (FileNotFoundException e) {
             e.printStackTrace();
             return new ArrayList<Page>();
