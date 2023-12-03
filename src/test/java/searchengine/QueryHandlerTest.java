@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class QueryhandlerTest {
+public class QueryHandlerTest {
     private QueryHandler systemUnderTest;
     private WebMapper webMapHelper;
 
