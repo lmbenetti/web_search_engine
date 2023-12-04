@@ -1,14 +1,15 @@
 package searchengine;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.TestInstance.Lifecycle;
+// import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+// import static org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import java.util.Random;
+// import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+// import java.util.stream.Collectors;
+// import java.util.stream.Stream;
 
-import org.junit.jupiter.api.AfterAll;
+// import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,13 +18,13 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+// import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
-import java.util.Set;
-import java.util.HashSet;
+// import java.util.Map;
+// import java.util.stream.Stream;
+// import java.util.stream.Collectors;
+// import java.util.Set;
+// import java.util.HashSet;
 
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -64,7 +65,7 @@ public class PageTest {
     void pageConstructor_CorrectInput_KeySetTest(){
         List<String> input = new ArrayList<String>(Arrays.asList("*PAGE:https://en.wikipedia.org/wiki/United_States\nUnited States\nthe\nthe\nunited\nstates\nof\namerica".split("\n")));
         System.out.println(input);
-        Page test = new Page(input);
+        // Page test = new Page(input);
         Set<String> expected = new HashSet<String>();
         expected.add("the");
         expected.add("united");
