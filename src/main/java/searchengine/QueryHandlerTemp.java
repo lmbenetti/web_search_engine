@@ -21,7 +21,6 @@ public class QueryHandlerTemp {
         webMap = new WebMapperTemp();
     }
 
-
     
     /** 
      * Processes  a search-query and returns a ranked list of pages.
@@ -61,8 +60,6 @@ public class QueryHandlerTemp {
         String regex = ".*[a-z]+.*";
         return query.matches(regex);
     }
-
-
     
     
     /** 
@@ -87,8 +84,6 @@ public class QueryHandlerTemp {
         }
         return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), pageSet);
     }
-
-
 
     
     /** 
@@ -170,7 +165,6 @@ public class QueryHandlerTemp {
     }
 
 
-
     
     /** 
      * A private method for turning a was string into a UTF_8-conform string
@@ -187,7 +181,6 @@ public class QueryHandlerTemp {
             return "";
         }
     }
-
     
     
     /** 
@@ -201,8 +194,6 @@ public class QueryHandlerTemp {
 
 
     }
-
-
     
     /** 
      * A private method returning a String-array or substrings to a query, which are selected using the regex for the logical or-operator.
