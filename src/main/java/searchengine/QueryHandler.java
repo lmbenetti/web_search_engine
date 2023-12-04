@@ -42,7 +42,7 @@ public class QueryHandler {
      * @param query A String that contains what the user has typed in the search block. 
      * @return boolean Returns true if the query is valid or false if it is not.
      */
-    boolean validateQuery(String query) {
+    private boolean validateQuery(String query) {
         // check that query has content
         if (query == null || query.trim().isEmpty()) {
             return false;
@@ -54,7 +54,7 @@ public class QueryHandler {
     }
     
     //Returns pages mathing a word as a HashSet
-    List<Page> getPagesSingleWordQuery(String query){
+    private List<Page> getPagesSingleWordQuery(String query){
 
         HashSet<Page> listToReturn = new HashSet<Page>();
 
@@ -65,7 +65,7 @@ public class QueryHandler {
         return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), listToReturn);
     }
 
-    List<Page>getPagesMultiWordQuery(String query){
+    private List<Page>getPagesMultiWordQuery(String query){
         //step 1: parse string for operations
 
         String[] orSections = getOrSections(query);
@@ -89,7 +89,7 @@ public class QueryHandler {
 
     }
 
-    Set<Page> logicalOr(List<Set<Page>> orSets){
+    private Set<Page> logicalOr(List<Set<Page>> orSets){
 
         Set<Page> postOr = new HashSet<Page>();
 
@@ -100,7 +100,7 @@ public class QueryHandler {
         return postOr;
     }
 
-    Set<Page> logicalAnd(List<Set<Page>> andSets){
+    private Set<Page> logicalAnd(List<Set<Page>> andSets){
 
         Iterator<Set<Page>> itr = andSets.iterator();
         Set<Page> postAnd = itr.next();
@@ -115,7 +115,7 @@ public class QueryHandler {
 
     //Helpermethods (all package private for now)
 
-    String decodeQuery(String originalQuery){
+    private String decodeQuery(String originalQuery){
         try {
             return URLDecoder.decode(originalQuery, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
@@ -132,7 +132,7 @@ public class QueryHandler {
 
     }
 
-    String[] getOrSections(String query){
+    private String[] getOrSections(String query){
         Pattern pattern = Pattern.compile("\\b\\s+or\\s+\\b", Pattern.CASE_INSENSITIVE);
         return pattern.split(query);
     }
