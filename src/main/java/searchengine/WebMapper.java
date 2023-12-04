@@ -31,7 +31,8 @@ public class WebMapper {
     public WebMapper() {
         try {
             fileName = Files.readString(Paths.get("config.txt")).strip();
-            webMap = makeWebMap(fileName);
+            webMap = new HashMap<>();
+            makeWebMap(fileName);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Please check config.txt for any errors");
@@ -42,11 +43,11 @@ public class WebMapper {
     /**
      * Creates an inverted index and maps the words to their corresponding pages.
      *
-     * @throws IOException if there is an IO error when reading the file.
-     */
-    public void createInvertedIndex() throws IOException {
-        webMap = makeWebMap(fileName);
-    }
+    //  * @throws IOException if there is an IO error when reading the file.
+    //  */
+    // public void createInvertedIndex() throws IOException {
+    //     webMap = makeWebMap(fileName);
+    // }
 
     /**
      * Private method to create a web map using the given filename.
@@ -55,22 +56,10 @@ public class WebMapper {
      * @param filename The name of the file which contains the data.
      * @return A HashMap where each key is a word and each value is a list of pages which contain that word.
      */
-    private HashMap<String, HashSet<Page>> makeWebMap(String filename){
-        HashMap<String, HashSet<Page>> mapToReturn = new HashMap<>();
-        List<Page> pageList = getPages(filename);
-        for (Page page : pageList) {
-            for(String word : page.getWebSiteWords()){
-                if (mapToReturn.containsKey(word)){
-                    HashSet<Page> pageToAdd = mapToReturn.get(word);
-                    pageToAdd.add(page);
-                    mapToReturn.put(word, pageToAdd);
-                }
-                else mapToReturn.put(word, new HashSet<Page>(){{
-                    add(page);
-                }});
-            }
+    private void updateWebMap(Page page){
+        for(String word : page.getWebSiteWords()){
+            webMap.computeIfAbsent(word, i -> new HashSet<>()).add(page);
         }
-        return mapToReturn;
     }
 
     /**
@@ -79,38 +68,33 @@ public class WebMapper {
      * @param filename The name of the file which contains the data.
      * @return A list of Page objects created from the given file.
      */
-    private List<Page> getPages(String filename) {
-        try {
-            List<Page> pageList = new ArrayList<>();
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
+    private void makeWebMap(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             List<String> webPage = new ArrayList<>();
             String line;
+
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("*PAGE")) {
                     if (webPage.size() > 2) {
-                        pageList.add(new Page(webPage));
-                        webPage.clear();
+                        Page page = new Page(webPage);
+                        updateWebMap(page);
                     }
-                    else if (webPage.size() > 0) {
-                        webPage.clear();
-                    }
+                    webPage.clear();
                 }
                 webPage.add(line);
             }
             if (webPage.size() > 2) {
-                pageList.add(new Page(webPage));
+                Page page = new Page(webPage);
+                updateWebMap(page);
             }
             reader.close();
-            return pageList;
         }
         
         catch (FileNotFoundException e) {
             e.printStackTrace();
-            return new ArrayList<Page>();
         }
         catch (IOException e) {
             e.printStackTrace();
-            return new ArrayList<Page>();
         }
     }
 
