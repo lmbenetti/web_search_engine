@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import java.util.Set;
-import java.util.stream.Collectors;
-
     /**
  * The WebMapper class maps web pages to their corresponding URLs.
  * 
@@ -20,18 +18,33 @@ public class WebMapperTemp {
     private HashMap<String, Set<String>> urlMap;
     private HashMap<String, Page> pageMap;
 
-    private String fileName;
 
    /**
      * Constructor for WebMapper.
-     * Initializes the webMap using the provided filename.
+     * Initializes the webMap using the path specified in the  config.txt file in the root-directory.
      *
-     * @param filename The name of the file which contains the data.
      */   
     public WebMapperTemp() {
         try {
-            fileName = Files.readString(Paths.get("config.txt")).strip();
-            makeWebMap(fileName);
+            String fileName = Files.readString(Paths.get("config.txt")).strip();
+            urlMap = new HashMap<String, Set<String>>();
+            pageMap = new HashMap<String, Page>(); 
+
+            List<Page> pageList = getPages(fileName);
+            for(Page page: pageList){
+                String url = page.getUrl();
+                for(String word: page.getWebSiteWords()){
+                    if(urlMap.containsKey(word)){
+                        Set<String> urlSet = urlMap.get(word);
+                        urlSet.add(url);
+                        urlMap.put(word, urlSet);
+                    }
+                    else{
+                        urlMap.put(word, new HashSet<String>() {{ add(url); }});
+                    }
+                }
+                pageMap.put(url, page);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Please check config.txt for any errors");
@@ -40,33 +53,6 @@ public class WebMapperTemp {
     }
 
 
-    /**
-     * Private method to create a web map using the given filename.
-     * It maps each word to a set of URL-strings in the field urlMap and maps each URL to a page in the pageMap.
-     *
-     * @param filename The name of the file which contains the data.
-     */
-    private void makeWebMap(String filename){
-        List<Page> pageList = getPages(filename);
-        for (Page page : pageList) {
-            for(String word : page.getWebSiteWords()){
-
-                String url = page.getUrl();
-
-                if (urlMap.containsKey(word)){
-                    Set<String> urlSet = urlMap.get(word);
-                    urlSet.add(url);
-                    urlMap.put(word, urlSet);
-                    
-                }
-                else urlMap.put(word, new HashSet<String>(){{
-                    add(url);
-                }});
-                pageMap.put(word, page);
-
-            }
-        }
-    }
 
     /**
      * Reads the file which is referenced by the filename and creates a list of Page objects from it.
@@ -101,8 +87,13 @@ public class WebMapperTemp {
     }
 
 
-    //getters
-
+    
+    /** 
+     * A getter-method which retrieves a Set of URL's matching a search-term.
+     * 
+     * @param word
+     * @return A Set<String> is returned with the URL-strings for websites containing the word parameter.
+     */
     public Set<String> getUrl(String word){
         if(!urlMap.containsKey(word)){
             return new HashSet<String>();
@@ -111,8 +102,19 @@ public class WebMapperTemp {
     }
 
 
+
+    
+    /** 
+     * A getter-method which retrieves a Page-object matching a URL.
+     * 
+     * @param url
+     * @return A Page-object is returned matching the provided URL
+     */
     public Page getPage(String url){
         return pageMap.get(url);
     }
-    
+    public static void main(String[] args) {
+        WebMapperTemp ne = new WebMapperTemp();
+        System.out.println("hello");
+    }
 }
