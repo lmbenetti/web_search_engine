@@ -46,8 +46,6 @@ public class QueryHandlerTest {
 
     }
 
-
-
     @Test
     void ProcessQuery_CorrectInput_SimpleQuery(){
         assertFalse(systemUnderTest.processQuery(" bag ").isEmpty());
@@ -104,30 +102,30 @@ public class QueryHandlerTest {
 
     @Test
     void getOrStrings_CorrectInput_complexQuery(){
-        // String[] result = systemUnderTest.getOrSections("Husband or Wife");
-        // assertEquals("Husband", result[0]);
-        // assertEquals("Wife", result[1]);
+        String[] result = systemUnderTest.getOrSections("Husband or Wife");
+        assertEquals("Husband", result[0]);
+        assertEquals("Wife", result[1]);
 
     }
 
     @Test
     void getOrStrings_CorrectInput_complexQuery2(){
-        // String[] result = systemUnderTest.getOrSections("Husband or Wife or Daugther OR Son Or or");
-        // assertEquals("Husband", result[0]);
-        // assertEquals("Wife", result[1]);
-        // assertEquals("Daugther", result[2]);
-        // assertEquals("Son", result[3]);
-        // assertEquals("or", result[4]);
+        String[] result = systemUnderTest.getOrSections("Husband or Wife or Daugther OR Son Or or");
+        assertEquals("Husband", result[0]);
+        assertEquals("Wife", result[1]);
+        assertEquals("Daugther", result[2]);
+        assertEquals("Son", result[3]);
+        assertEquals("or", result[4]);
     }
 
     @Test
     void getOrStrings_CorrectInput_complexQuery3(){
-        // String[] result = systemUnderTest.getOrSections("Husband Wife or Wife Husband or Brother Daugther OR Son Sister Or or no");
-        // assertEquals("Husband Wife", result[0]);
-        // assertEquals("Wife Husband", result[1]);
-        // assertEquals("Brother Daugther", result[2]);
-        // assertEquals("Son Sister", result[3]);
-        // assertEquals("or no", result[4]);
+        String[] result = systemUnderTest.getOrSections("Husband Wife or Wife Husband or Brother Daugther OR Son Sister Or or no");
+        assertEquals("Husband Wife", result[0]);
+        assertEquals("Wife Husband", result[1]);
+        assertEquals("Brother Daugther", result[2]);
+        assertEquals("Son Sister", result[3]);
+        assertEquals("or no", result[4]);
 
     }
 
