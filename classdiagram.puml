@@ -7,7 +7,7 @@ class Main {
 class WebServer {
     -PORT: int
     -server: HttpServer
-    -queryHandler: QueryHandlerTemp
+    -queryHandler: QueryHandler
     -serverState: boolean
     +WebServer()
     -printServerMessage()
@@ -21,9 +21,9 @@ class WebServer {
     +getServerPort(): int
 }
 
-class QueryHandlerTemp {
+class QueryHandler {
     -webMap: WebMapper
-    +QueryHandlerTemp()
+    +QueryHandler()
     +processQuery(String): List<Page>
     -validateQuery(String): boolean
     -getPagesSingleWordQuery(String): List<Page>
@@ -68,8 +68,8 @@ class PageRanker {
 }
 
 Main --> WebServer : uses >
-WebServer --> QueryHandlerTemp : uses >
-QueryHandlerTemp --> WebMapper : uses >
+WebServer --> QueryHandler : uses >
+QueryHandler --> WebMapper : uses >
 WebMapper --> Page : uses >
 PageRanker --> Page : uses >
 

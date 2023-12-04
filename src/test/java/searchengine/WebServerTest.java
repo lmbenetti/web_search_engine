@@ -60,7 +60,6 @@ class WebServerTest {
         assertNull(httpGet(baseURL));
     }
 
-
     private String httpGet(String url) {
     var uri = URI.create(url);
     var client = HttpClient.newHttpClient();
@@ -73,11 +72,7 @@ class WebServerTest {
     }
 }
 
-
   /* 
-
-
- 
     @Test
     void lookupWebServer() {
         String baseURL = String.format("http://localhost:%d/search?q=", server.getServerPort());
@@ -92,7 +87,6 @@ class WebServerTest {
             httpGet(baseURL + "word4"));
     }
     */
-
 }
 
  

@@ -47,6 +47,7 @@ public class QueryHandler {
         if (query == null || query.trim().isEmpty()) {
             return false;
         }
+        //check for and exclude "or"
         // check for minimum 1 letter and that is not just single special character
         String regex = ".*[a-z]+.*";
         return query.matches(regex);

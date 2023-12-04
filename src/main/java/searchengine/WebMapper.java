@@ -34,16 +34,6 @@ public class WebMapper {
             e.printStackTrace();
             System.out.println("Please check config.txt for any errors");
         }
-
-    }
-
-    /**
-     * Creates an inverted index and maps the words to their corresponding pages.
-     *
-     * @throws IOException if there is an IO error when reading the file.
-     */
-    public void createInvertedIndex()throws IOException{
-        webMap = makeWebMap(fileName);
     }
 
     /**
