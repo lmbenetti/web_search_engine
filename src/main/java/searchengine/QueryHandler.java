@@ -52,7 +52,7 @@ public class QueryHandler {
      */
     private boolean validateQuery(String query) {
         // check that query has content
-        if (query == null || query.trim().isEmpty()) {
+        if (query == null || query.trim().isEmpty() || query.startsWith("or ") || query.endsWith(" or")) {
             return false;
         }
         //check for and exclude "or"
