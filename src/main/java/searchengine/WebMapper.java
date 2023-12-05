@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.io.BufferedReader;
 import java.io.FileReader;
-
-
 import java.util.Set;
 
 /**
@@ -54,8 +52,6 @@ public class WebMapper {
         }
 
     }
-
-
 
    /**
      * Reads the file which is referenced by the filename and creates a list of Page objects from it.
