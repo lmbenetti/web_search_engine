@@ -82,7 +82,7 @@ public class QueryHandler {
 
             pageSet.add(webMap.getPage(url));
         }
-        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), pageSet);
+        return PageRanker.rankPages("titlePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), pageSet);
     }
 
     
@@ -123,7 +123,7 @@ public class QueryHandler {
             pageSet.add(webMap.getPage(url));
         }
 
-        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), pageSet);
+        return PageRanker.rankPages("titlePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), pageSet);
     }
 
     

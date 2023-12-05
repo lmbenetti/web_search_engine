@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
     /**
  * The WebMapper class maps web pages to their corresponding URLs.
  * 
@@ -61,9 +63,15 @@ public class WebMapper {
      * @return A list of Page objects created from the given file.
      */
     private List<Page> getPages(String filename) {
-        try {
+
+
+         try {
             List<Page> pageList = new ArrayList<>();
-            List<String> lines = Files.readAllLines(Paths.get(filename));
+            List<String> lines;
+            try (Stream<String> stream = Files.lines(Paths.get(filename))) {
+                lines = stream.collect(Collectors.toList());
+            }
+
             int lastIndex = lines.size();
             for (int i = lines.size() - 1; i >= 0; --i) {
                 if (lines.get(i).startsWith("*PAGE")) {
@@ -75,10 +83,6 @@ public class WebMapper {
                 }
             }
             return pageList;
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return new ArrayList<Page>();
         }
         catch (IOException e) {
             e.printStackTrace();
