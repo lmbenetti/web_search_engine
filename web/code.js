@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then((data) => {
             if (data.length === 0) {
                 document.getElementById("responsesize").innerHTML = 
-                    "<p>No web page contains the query word.</p>";
+                    "<p>Your search is either invalid or has retrieved no results. Please, try again.</p>";
                     document.getElementById("urllist").innerHTML = "";
             }
             else {
