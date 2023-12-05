@@ -5,13 +5,15 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
     /**
  * The WebMapper class maps web pages to their corresponding URLs.
  * 
@@ -56,38 +58,39 @@ public class WebMapper {
 
 
 
-    /**
+   /**
      * Reads the file which is referenced by the filename and creates a list of Page objects from it.
      *
      * @param filename The name of the file which contains the data.
      * @return A list of Page objects created from the given file.
      */
     private List<Page> getPages(String filename) {
+        List<Page> pageList = new ArrayList<>();
 
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            List<String> webPage = new ArrayList<>();
 
-         try {
-            List<Page> pageList = new ArrayList<>();
-            List<String> lines;
-            try (Stream<String> stream = Files.lines(Paths.get(filename))) {
-                lines = stream.collect(Collectors.toList());
-            }
-
-            int lastIndex = lines.size();
-            for (int i = lines.size() - 1; i >= 0; --i) {
-                if (lines.get(i).startsWith("*PAGE")) {
-                    List<String> webPage = lines.subList(i, lastIndex);
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("*PAGE")) {
                     if (webPage.size() > 2) {
                         pageList.add(new Page(webPage));
                     }
-                    lastIndex = i;
+                    webPage.clear();
                 }
+                webPage.add(line);
             }
-            return pageList;
+
+            // Add the last page if it has more than 2 lines
+            if (webPage.size() > 2) {
+                pageList.add(new Page(webPage));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace(); // or use logging
         }
-        catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<Page>();
-        }
+
+        return pageList;
     }
 
 
