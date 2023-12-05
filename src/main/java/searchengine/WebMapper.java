@@ -7,11 +7,14 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.nio.file.Paths;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
+
+
 import java.util.Set;
 
-/**
+    /**
  * The WebMapper class maps web pages to their corresponding URLs.
  * 
  */
@@ -53,6 +56,8 @@ public class WebMapper {
 
     }
 
+
+
    /**
      * Reads the file which is referenced by the filename and creates a list of Page objects from it.
      *
@@ -60,37 +65,40 @@ public class WebMapper {
      * @return A list of Page objects created from the given file.
      */
     private List<Page> getPages(String filename) {
-        List<Page> pageList = new ArrayList<>();
-    
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            List<String> webPage = new ArrayList<>();
-            boolean isPageStart = false;
-    
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("*PAGE")) {
-                    if (isPageStart && !webPage.isEmpty()) {
-                        pageList.add(new Page(webPage));
-                        webPage.clear();
-                    }
-                    isPageStart = true;
+    List<Page> pageList = new ArrayList<>();
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        String line;
+        List<String> webPage = new ArrayList<>();
+        boolean isPageStart = false;
+
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("*PAGE")) {
+                if (isPageStart && !webPage.isEmpty()) {
+                    pageList.add(new Page(webPage));
+                    webPage.clear();
                 }
-                if (isPageStart) {
-                    webPage.add(line);
-                }
+                isPageStart = true;
             }
-    
-            // Add the last page if the list is not empty
-            if (!webPage.isEmpty()) {
-                pageList.add(new Page(webPage));
+            if (isPageStart) {
+                webPage.add(line);
             }
-    
-        } catch (IOException e) {
-            e.printStackTrace(); // or use logging
         }
-    
-        return pageList;
+
+        // Add the last page if the list is not empty
+        if (!webPage.isEmpty()) {
+            pageList.add(new Page(webPage));
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace(); // or use logging
     }
+
+    return pageList;
+}
+
+
+
     
     /** 
      * A getter-method which retrieves a Set of URL's matching a search-term.
@@ -105,6 +113,9 @@ public class WebMapper {
        return urlMap.get(word);
     }
 
+
+
+    
     /** 
      * A getter-method which retrieves a Page-object matching a URL.
      * 

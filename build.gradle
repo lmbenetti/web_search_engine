@@ -87,7 +87,5 @@ tasks.named('test') {
 }
 
 tasks.withType(JavaExec) {
-    jvmArgs = ["-Xmx5g"] // Set the maximum heap size to 2 GB
+    jvmArgs = ["-Xmx3g"] // Set the maximum heap size to 5 GB
 }
-
-
