@@ -11,6 +11,7 @@ import java.util.Set;
  */
 public class Page implements Comparable<Page>{
     private String url, title;
+    
     private HashMap<String, Integer> wordFrequency;
     private int pagerank;
 
