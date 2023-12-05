@@ -68,32 +68,33 @@ public class WebMapper {
     private List<Page> getPages(String filename) {
     List<Page> pageList = new ArrayList<>();
 
-    try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-        String line;
-        List<String> webPage = new ArrayList<>();
-        boolean isPageStart = false;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            List<String> webPage = new ArrayList<>();
+            boolean isPageStart = false;
 
-        while ((line = reader.readLine()) != null) {
-            if (line.startsWith("*PAGE")) {
-                if (isPageStart && !webPage.isEmpty()) {
-                    pageList.add(new Page(webPage));
-                    webPage.clear();
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("*PAGE")) {
+                    if (isPageStart && !webPage.isEmpty()) {
+                        pageList.add(new Page(webPage));
+                        webPage.clear();
+                    }
+                    isPageStart = true;
                 }
-                isPageStart = true;
+                if (isPageStart) {
+                    webPage.add(line);
+                }
             }
-            if (isPageStart) {
-                webPage.add(line);
+
+            // Add the last page if the list is not empty
+            if (!webPage.isEmpty()) {
+                pageList.add(new Page(webPage));
             }
-        }
 
-        // Add the last page if the list is not empty
-        if (!webPage.isEmpty()) {
-            pageList.add(new Page(webPage));
+        } catch (IOException e) {
+            e.printStackTrace(); // or use logging
         }
-
-    } catch (IOException e) {
-        e.printStackTrace(); // or use logging
-    }
+        return pageList;
     }
 
     /** 
