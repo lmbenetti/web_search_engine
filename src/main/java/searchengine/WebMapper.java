@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.nio.file.Paths;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 
 
 import java.util.Set;
 
-    /**
+/**
  * The WebMapper class maps web pages to their corresponding URLs.
  * 
  */
@@ -66,34 +65,36 @@ public class WebMapper {
      */
     private List<Page> getPages(String filename) {
         List<Page> pageList = new ArrayList<>();
-
+    
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             List<String> webPage = new ArrayList<>();
-
+            boolean isPageStart = false;
+    
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("*PAGE")) {
-                    if (webPage.size() > 2) {
+                    if (isPageStart && !webPage.isEmpty()) {
                         pageList.add(new Page(webPage));
+                        webPage.clear();
                     }
-                    webPage.clear();
+                    isPageStart = true;
                 }
-                webPage.add(line);
+                if (isPageStart) {
+                    webPage.add(line);
+                }
             }
-
-            // Add the last page if it has more than 2 lines
-            if (webPage.size() > 2) {
+    
+            // Add the last page if the list is not empty
+            if (!webPage.isEmpty()) {
                 pageList.add(new Page(webPage));
             }
-
+    
         } catch (IOException e) {
             e.printStackTrace(); // or use logging
         }
-
+    
         return pageList;
     }
-
-
     
     /** 
      * A getter-method which retrieves a Set of URL's matching a search-term.
@@ -108,9 +109,6 @@ public class WebMapper {
        return urlMap.get(word);
     }
 
-
-
-    
     /** 
      * A getter-method which retrieves a Page-object matching a URL.
      * 

@@ -85,3 +85,9 @@ tasks.named('test') {
     */
     useJUnitPlatform()
 }
+
+tasks.withType(JavaExec) {
+    jvmArgs = ["-Xmx5g"] // Set the maximum heap size to 2 GB
+}
+
+

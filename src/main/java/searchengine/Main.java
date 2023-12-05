@@ -15,8 +15,10 @@ public class Main {
      */
     public static void main(final String... args) throws IOException {
         
+        System.out.println("Max memory: " + Runtime.getRuntime().maxMemory());
         WebServer webserver = new WebServer();
         webserver.runServer();
+
 
     }
 }
