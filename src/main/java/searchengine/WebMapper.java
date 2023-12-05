@@ -10,56 +10,49 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import java.util.Set;
-import java.util.stream.Collectors;
-
-/**
+    /**
  * The WebMapper class maps web pages to their corresponding URLs.
  * 
  */
 public class WebMapper {
-    private HashMap<String, HashSet<Page>> webMap;
-    private String fileName;
+    private HashMap<String, Set<String>> urlMap;
+    private HashMap<String, Page> pageMap;
 
-    /**
+
+   /**
      * Constructor for WebMapper.
-     * Initializes the webMap using the provided filename.
+     * Initializes the webMap using the path specified in the  config.txt file in the root-directory.
      *
-     * @param filename The name of the file which contains the data.
      */   
     public WebMapper() {
         try {
-            fileName = Files.readString(Paths.get("config.txt")).strip();
-            webMap = makeWebMap(fileName);
+            String fileName = Files.readString(Paths.get("config.txt")).strip();
+            urlMap = new HashMap<String, Set<String>>();
+            pageMap = new HashMap<String, Page>(); 
+
+            List<Page> pageList = getPages(fileName);
+            for(Page page: pageList){
+                String url = page.getUrl();
+                for(String word: page.getWebSiteWords()){
+                    if(urlMap.containsKey(word)){
+                        Set<String> urlSet = urlMap.get(word);
+                        urlSet.add(url);
+                        urlMap.put(word, urlSet);
+                    }
+                    else{
+                        urlMap.put(word, new HashSet<String>() {{ add(url); }});
+                    }
+                }
+                pageMap.put(url, page);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Please check config.txt for any errors");
         }
+
     }
 
-    /**
-     * Private method to create a web map using the given filename.
-     * It maps each word of that file to a list of pages containing that word.
-     *
-     * @param filename The name of the file which contains the data.
-     * @return A HashMap where each key is a word and each value is a list of pages which contain that word.
-     */
-    private HashMap<String, HashSet<Page>> makeWebMap(String filename){
-        HashMap<String, HashSet<Page>> mapToReturn = new HashMap<>();
-        List<Page> pageList = getPages(filename);
-        for (Page page : pageList) {
-            for(String word : page.getWebSiteWords()){
-                if (mapToReturn.containsKey(word)){
-                    HashSet<Page> pageToAdd = mapToReturn.get(word);
-                    pageToAdd.add(page);
-                    mapToReturn.put(word, pageToAdd);
-                }
-                else mapToReturn.put(word, new HashSet<Page>(){{
-                    add(page);
-                }});
-            }
-        }
-        return mapToReturn;
-    }
+
 
     /**
      * Reads the file which is referenced by the filename and creates a list of Page objects from it.
@@ -93,27 +86,32 @@ public class WebMapper {
         }
     }
 
-    /**
-     * Retrieves the HashMap of the instance.
-     *
-     * @return A HashMap where each key is a word and each value is a list of pages containing that word.
-     */
-    public HashMap<String, HashSet<Page>> getWebMap() {
-        return webMap;
-    }
 
-    /**
-     * Retrieves a Set<Page>-object relating to the passed argument query.
+    
+    /** 
+     * A getter-method which retrieves a Set of URL's matching a search-term.
      * 
-     * 
-     * @param query
-     * @return Returns a clone of a Set intance containing Page-instances relating to the query-word through the HashMap field of the class. If no Set is matched, an empty set is retrieved.
+     * @param word
+     * @return A Set<String> is returned with the URL-strings for websites containing the word parameter.
      */
-    public Set<Page> getPageSet(String query){
-
-        if(!webMap.containsKey(query)){
-            return new HashSet<Page>();
+    public Set<String> getUrl(String word){
+        if(!urlMap.containsKey(word)){
+            return new HashSet<String>();
         }
-        return webMap.get(query).stream().collect(Collectors.toSet()); 
+       return urlMap.get(word);
     }
+
+
+
+    
+    /** 
+     * A getter-method which retrieves a Page-object matching a URL.
+     * 
+     * @param url
+     * @return A Page-object is returned matching the provided URL
+     */
+    public Page getPage(String url){
+        return pageMap.get(url);
+    }
+
 }

@@ -16,11 +16,18 @@ public class QueryHandler {
     private WebMapper webMap;
 
 
+
     public QueryHandler() {
         webMap = new WebMapper();
     }
 
-
+    
+    /** 
+     * Processes  a search-query and returns a ranked list of pages.
+     * 
+     * @param query
+     * @return List<Page>
+     */
     public List<Page> processQuery(String query)
     {
         String decodedQuery = decodeQuery(query).toLowerCase().trim();
@@ -35,10 +42,11 @@ public class QueryHandler {
         return new ArrayList<Page>();
     }
 
-    
-    /** 
+
+        /** 
      * A method that checks wheter the user input is a valid query or no. To decide that it checks if
      * it is not empty abd if it contains at least one letter and not just a single special character.
+     * 
      * @param query A String that contains what the user has typed in the search block. 
      * @return boolean Returns true if the query is valid or false if it is not.
      */
@@ -53,57 +61,100 @@ public class QueryHandler {
         return query.matches(regex);
     }
     
-    //Returns pages mathing a word as a HashSet
+    
+    /** 
+     * Returns a ranked list of pages for a single-word query.
+     * 
+     * @param query
+     * @return List<Page>
+     */
     private List<Page> getPagesSingleWordQuery(String query){
 
-        HashSet<Page> listToReturn = new HashSet<Page>();
+        Set<String> urlSet = webMap.getUrl(query);
+        Set<Page> pageSet = new HashSet<Page>();
 
         //refactor so WebMapper takes care of everything locally (no need to call .getWebMap)
-        if (webMap.getWebMap().containsKey(query)){
-            listToReturn = webMap.getWebMap().get(query);
+        if (urlSet.isEmpty()){
+            return new ArrayList<Page>();
         }
-        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), listToReturn);
+
+        for(String url : urlSet){
+
+            pageSet.add(webMap.getPage(url));
+        }
+        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), pageSet);
     }
 
-    private List<Page>getPagesMultiWordQuery(String query){
-        //step 1: parse string for operations
+    
+    /** 
+     * Returns a ranked list of pages for a multiwordquery. Spaces between words are inferred as intersect-operators, 
+     * while a string consisting matching the regex, //b+//s+(or)//s+//b+, is inferred to be a union-operator.
+     * The individual query-words are then replaced with sets containing url-strings to pages containing the query-word. 
+     * The final set of url's is then converted into a ranked list of pages.
+     * 
+     * @param query
+     * @return List<Page>
+     */
+    private List<Page> getPagesMultiWordQuery(String query){
 
         String[] orSections = getOrSections(query);
         String[] andSection;
 
 
-        List<Set<Page>> orSets = new ArrayList<Set<Page>>();
-        List<Set<Page>> andSets = new ArrayList<Set<Page>>();
+        List<Set<String>> orSets = new ArrayList<Set<String>>();
+        List<Set<String>> andSets = new ArrayList<Set<String>>();
+
 
         for(int o = 0; o  < orSections.length; o++){
 
             andSection = orSections[o].split(" +");
             for(int a = 0; a< andSection.length; a++){
-                andSets.add(webMap.getPageSet(andSection[a]));
+                andSets.add(webMap.getUrl(andSection[a]));
             }
             orSets.add(logicalAnd(andSets));
             andSets.clear();
         }
 
-        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), logicalOr(orSets));
 
+        Set<String> urlSet = logicalOr(orSets);
+        Set<Page> pageSet = new HashSet<Page>();
+
+        for(String url: urlSet){
+            pageSet.add(webMap.getPage(url));
+        }
+
+        return PageRanker.rankPages("simplePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), pageSet);
     }
 
-    private Set<Page> logicalOr(List<Set<Page>> orSets){
+    
+    /** 
+     * A method for finding the union of one or more hashsets containing url-strings.
+     * 
+     * @param orSets
+     * @return Set<String>
+     */
+    private Set<String> logicalOr(List<Set<String>> orSets){
 
-        Set<Page> postOr = new HashSet<Page>();
+        Set<String> postOr = new HashSet<String>();
 
-        for(Set<Page> pageSet : orSets){
+        for(Set<String> pageSet : orSets){
             postOr.addAll(pageSet);
         }
 
         return postOr;
     }
 
-    private Set<Page> logicalAnd(List<Set<Page>> andSets){
+    
+    /**
+     * A method for finding the intersect of one or more hashsets containing url-strings. 
+     * 
+     * @param andSets
+     * @return Set<String>
+     */
+    private Set<String> logicalAnd(List<Set<String>> andSets){
 
-        Iterator<Set<Page>> itr = andSets.iterator();
-        Set<Page> postAnd = itr.next();
+        Iterator<Set<String>> itr = andSets.iterator();
+        Set<String> postAnd = itr.next();
 
         while(itr.hasNext()){
             postAnd.retainAll(itr.next());
@@ -113,8 +164,14 @@ public class QueryHandler {
 
     }
 
-    //Helpermethods (all package private for now)
 
+    
+    /** 
+     * A private method for turning a was string into a UTF_8-conform string
+     * 
+     * @param originalQuery
+     * @return String
+     */
     private String decodeQuery(String originalQuery){
         try {
             return URLDecoder.decode(originalQuery, StandardCharsets.UTF_8.toString());
@@ -124,18 +181,31 @@ public class QueryHandler {
             return "";
         }
     }
-
-    //Boolean which tests if word is simple or not (one word search or multiple word search)
+    
+    
+    /** 
+     * A private method for evaluating whether a string contains a single-word query.
+     * 
+     * @param query
+     * @return boolean
+     */
     private boolean isSimpleWord(String query){
         return (!query.trim().contains(" ")); 
 
 
     }
-
+    
+    /** 
+     * A private method returning a String-array or substrings to a query, which are selected using the regex for the logical or-operator.
+     * 
+     * @param query
+     * @return String[]
+     */
     private String[] getOrSections(String query){
         Pattern pattern = Pattern.compile("\\b\\s+or\\s+\\b", Pattern.CASE_INSENSITIVE);
         return pattern.split(query);
     }
-    
-}
 
+
+  
+}
