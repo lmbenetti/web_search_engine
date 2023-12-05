@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The WebMapper class maps web pages to their corresponding URLs.
@@ -91,7 +92,8 @@ public class WebMapper {
     
         return pageList;
     }
-    
+
+
     /** 
      * A getter-method which retrieves a Set of URL's matching a search-term.
      * 
@@ -102,7 +104,7 @@ public class WebMapper {
         if(!urlMap.containsKey(word)){
             return new HashSet<String>();
         }
-       return urlMap.get(word);
+       return urlMap.get(word).stream().collect(Collectors.toSet());
     }
 
     /** 
@@ -113,6 +115,7 @@ public class WebMapper {
      */
     public Page getPage(String url){
         return pageMap.get(url);
+
     }
 
 }
