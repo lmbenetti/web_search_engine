@@ -76,14 +76,14 @@ public class WebMapper {
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("*PAGE")) {
                     if (isPageStart && !webPage.isEmpty()) {
-                        pageList.add(new Page(webPage));
+                        if (webPage.size() > 2) {
+                            pageList.add(new Page(webPage));
+                        }
                         webPage.clear();
                     }
                     isPageStart = true;
                 }
-                if (isPageStart) {
-                    webPage.add(line);
-                }
+                webPage.add(line);
             }
 
             // Add the last page if the list is not empty
