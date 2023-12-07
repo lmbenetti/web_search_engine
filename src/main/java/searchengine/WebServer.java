@@ -114,7 +114,7 @@ public class WebServer {
   }
 
   /**
-   * Starts server and prints the start-up message.
+   * Starts server and prints start-up message.
    */
   public void runServer() {
     try {

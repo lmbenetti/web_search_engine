@@ -20,14 +20,14 @@ public class PageRanker {
         List<Page> orderedList;
         switch(queryType) {
             case "simplePageRanker":
-              orderedList = simplePageRanker(queries, pages);
-              break;
-              case "titlePageRanker":
+                orderedList = simplePageRanker(queries, pages);
+                break;
+            case "titlePageRanker":
                 orderedList = titlePageRanker(queries, pages);
                 break;
             default:
                 orderedList = new ArrayList<Page>();
-          }
+        }
           
         return orderedList;
     
