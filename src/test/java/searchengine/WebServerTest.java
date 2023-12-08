@@ -90,6 +90,14 @@ public class WebServerTest {
         assertEquals("[{\"url\": \"https://en.wikipedia.org/wiki/Statue_of_Liberty\", \"title\": \"Statue of Liberty\"}]", 
             httpGet(baseURL + "tablet"));
         assertEquals("[]", 
-            httpGet(baseURL + "locked"));
+            httpGet(baseURL + "locked"));   
     }
+
+    @Test 
+    void lookupWebServer_ConsistantResults(){
+        String baseURL = String.format("http://localhost:%d/search?q=", server.getServerPort());
+        assertEquals( httpGet(baseURL + "paper"), httpGet(baseURL + "paper"));
+
+    }
+    
 } 
