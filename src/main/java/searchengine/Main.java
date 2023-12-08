@@ -15,9 +15,22 @@ public class Main {
      * @throws IOException if there is an IO error when reading the configuration file.
      */
     public static void main(final String... args) throws IOException {
+        /* 
         System.out.println("Max memory: " + Runtime.getRuntime().maxMemory());
         WebServer webserver = new WebServer();
         webserver.runServer();
+        */
+
+        QueryHandler n = new QueryHandler();
+        List<Page> a = n.processQuery("paper");
+        for(Page b: a){
+            System.out.println(b.getTitle() + " " + b.getRank());
+        }
+
+        a = n.processQuery("paper");
+        for(Page b: a){
+            System.out.println(b.getTitle() + " " + b.getRank());
+        }
 
     }
 }

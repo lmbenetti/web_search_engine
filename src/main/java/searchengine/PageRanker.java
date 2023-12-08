@@ -47,7 +47,7 @@ public class PageRanker {
         for(Page page: pages){
             int rank = 0;
             for(String query : queries){
-                String[] splitQuery = query.split(" ");
+                String[] splitQuery = query.split(" +");
                 for(String qWord: splitQuery){
                     int toAdd = page.getWordFrequency(qWord);
                     rank += toAdd == -1? 0: toAdd;
@@ -63,13 +63,16 @@ public class PageRanker {
     }
 
     private static List<Page> titlePageRanker(List<String> queries, Set<Page> pages){
+
         for(Page page: pages){
             int rank = 0;
             for(String query : queries){
-                String[] splitQuery = query.split(" ");
+                String[] splitQuery = query.split(" +");
                 for(String qWord: splitQuery){
+                    int toAdd = page.getWordFrequency(qWord);
+                    rank += toAdd == -1? 0: toAdd;
                     if(page.getTitle().toLowerCase().contains(qWord.toLowerCase())){
-                        rank++;
+                        rank *=2;
                     }
                 }
             }

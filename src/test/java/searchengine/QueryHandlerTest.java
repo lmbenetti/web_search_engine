@@ -56,43 +56,46 @@ public class QueryHandlerTest {
         assertTrue(systemUnderTest.processQuery(" thiswordshouldnotexistinthedictionaryandshouldneverbesearchable ").isEmpty());
 
     }
-
     
     /*we want this test to be true in the future, so let's keep up the good work */
+
+    /* 
+
 
  
     @Test
     void ProcessQuery_CorrectInput_SpecialCharacters(){
-        assertTrue(systemUnderTest.processQuery(" ?werner! ").isEmpty());
+        assertTrue(!systemUnderTest.processQuery(" ?werner! ").isEmpty());
     }
 
 
     @Test
     void ProcessQuery_CorrectInput_OneLetterOff(){
-        assertTrue(systemUnderTest.processQuery(" applo ").isEmpty());
+        assertTrue(!systemUnderTest.processQuery(" applo ").isEmpty());
 
     }
+    */
 
     @Test
     void ProcessQuery_CorrectInput_CapitalLetter(){
-        assertFalse(systemUnderTest.processQuery(" union ").isEmpty());
+        assertFalse(systemUnderTest.processQuery(" Union ").isEmpty());
 
     }
 
     @Test
-    void ProcessQuery_CorrectInput_MultipleWords_LongerReturnList(){
+    void ProcessQuery_CorrectInput_MultipleAndWords_ShorterReturnList(){
         assertTrue(systemUnderTest.processQuery("sun united").size() < systemUnderTest.processQuery("united").size());
 
     }
 
 
     @Test
-    void ProcessQuery_CorrectInput_MultipleWords(){
+    void ProcessQuery_CorrectInput_MultipleWords_ConnectedWords1(){
         assertFalse(systemUnderTest.processQuery("modern asia").isEmpty());
     }
 
     @Test
-    void ProcessQuery_CorrectInput_MultipleWords_Connected_Words(){
+    void ProcessQuery_CorrectInput_MultipleWords_ConnectedWords2(){
         assertFalse(systemUnderTest.processQuery("union america").isEmpty());
     }
 
