@@ -63,21 +63,29 @@ public class PageRanker {
 
     private static List<Page> titlePageRanker(List<String> queries, Set<Page> pages){
 
-        for(Page page: pages){
+        for (Page page : pages) {
             int rank = 0;
-            for(String query : queries){
+            boolean titleContainsQueryWord = false;
+    
+            for (String query : queries) {
                 String[] splitQuery = query.split(" +");
-                for(String qWord: splitQuery){
+    
+                for (String qWord : splitQuery) {
                     int toAdd = page.getWordFrequency(qWord);
-                    rank += toAdd == -1? 0: toAdd;
-                    if(page.getTitle().toLowerCase().contains(qWord.toLowerCase())){
-                        rank *=2;
+                    rank += toAdd == -1 ? 0 : toAdd;
+    
+                    if (page.getTitle().toLowerCase().contains(qWord.toLowerCase())) {
+                        titleContainsQueryWord = true;
                     }
                 }
             }
+            
+            if (titleContainsQueryWord) {
+                rank *= 2;
+            }
+    
             page.setRank(rank);
         }
-        
         List<Page> orderedList = new ArrayList<Page>(pages);
         Collections.sort(orderedList, Collections.reverseOrder());
         return orderedList;
