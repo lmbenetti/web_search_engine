@@ -57,7 +57,7 @@ public class PageRanker {
         }    
 
         List<Page> orderedList = new ArrayList<Page>(pages);
-        Collections.reverse(orderedList);
+        orderedList.sort(Comparator.comparingInt(Page::getRank).reversed());
 
         return orderedList;
     }

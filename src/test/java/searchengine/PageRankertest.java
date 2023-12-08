@@ -1,54 +1,167 @@
-// package searchengine;
-// // import static org.junit.jupiter.api.Assertions.assertEquals;
-// // import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-// import static org.junit.jupiter.api.Assertions.assertTrue;
-// // import static org.junit.jupiter.api.TestInstance.Lifecycle;
+package searchengine;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.TestInstance.Lifecycle;
 
-// // import java.util.Random;
-// // import java.util.Set;
-// // import java.util.stream.Collectors;
-// // import java.util.stream.Stream;
+import java.util.Random; 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-// // import org.junit.jupiter.api.AfterAll;
-// import org.junit.jupiter.api.BeforeAll;
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.TestInstance;
-// import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-// import java.util.List;
-// // import java.io.IOException;
-// import java.util.ArrayList;
-// // import java.util.Arrays;
-// // import java.util.HashMap;
-// // import java.util.HashSet;
-// // import java.util.Map;
-// // import java.util.stream.Stream;
-// // import java.util.stream.Collectors;
-// // import java.util.Set;
-// // import java.util.HashSet;
+import java.util.List;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.HashSet;
 
-// @TestInstance(Lifecycle.PER_CLASS)
-// public class PageRankertest {
-//     private WebMapper testMap;
+ @TestInstance(Lifecycle.PER_CLASS)
+ public class PageRankertest {
+     private WebMapper testMap;
+     private String singleSearchWord;
+     private String multiSearchWord;
+     private String multiOrSearchWord;
 
-//     @BeforeAll 
-//     void init(){
-//         testMap = new WebMapper();
-//     }
-
-//     @Test
-//     void pageRanker_CorrectDecreasingSorting(){
-//         String singleSearchWord = "united";
-//         List<String> query = new ArrayList() {{ add(singleSearchWord); }};
-//         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, testMap.getWebMap().get(singleSearchWord));
+     @BeforeAll 
+     void init(){
+        testMap = new WebMapper();
+        singleSearchWord = "United";
+        multiSearchWord = "United States";
+        multiOrSearchWord = "United or States";
         
-//         int last = Integer.MAX_VALUE;
-//         for(Page page: pages){
-//             int rank = page.getRank();
-//             assertTrue(rank < last);
-//             last = rank;
-//         }
 
-//     }
+     }
 
-// }
+     @Test
+     void pageRanker_simplePageRanker_CorrectDecreasingSorting_Single_Word(){
+        List<String> query = new ArrayList() {{ add(singleSearchWord); }};
+        Set<String> urlSet= testMap.getUrl(singleSearchWord);
+        Set<Page> pageSet = new HashSet<Page>();
+
+        for(String url: urlSet){
+            pageSet.add(testMap.getPage(url));
+        }
+         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, pageSet);
+        
+         int last = Integer.MAX_VALUE;
+         for(Page page: pages){
+             int rank = page.getRank();
+             assertTrue(rank <= last);
+             last = rank;
+         }
+
+     }
+
+     @Test
+     void pageRanker_simplePageRanker_CorrectDecreasingSorting_MultipleWord(){
+        List<String> query = new ArrayList() {{ add(multiSearchWord); }};
+        Set<String> urlSet= testMap.getUrl(singleSearchWord);
+        Set<Page> pageSet = new HashSet<Page>();
+
+        for(String url: urlSet){
+            pageSet.add(testMap.getPage(url));
+        }
+         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, pageSet);
+        
+         int last = Integer.MAX_VALUE;
+         for(Page page: pages){
+             int rank = page.getRank();
+             assertTrue(rank <= last);
+             last = rank;
+         }
+
+     }
+
+    @Test
+     void pageRanker_simplePageRanker_CorrectDecreasingSorting_MultipleOrWord(){
+        List<String> query = new ArrayList() {{ add(multiOrSearchWord); }};
+        Set<String> urlSet= testMap.getUrl(singleSearchWord);
+        Set<Page> pageSet = new HashSet<Page>();
+
+        for(String url: urlSet){
+            pageSet.add(testMap.getPage(url));
+        }
+         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, pageSet);
+        
+         int last = Integer.MAX_VALUE;
+         for(Page page: pages){
+             int rank = page.getRank();
+             assertTrue(rank <= last);
+             last = rank;
+         }
+
+     }
+
+     @Test
+     void pageRanker_titlePageRanker_CorrectDecreasingSorting_SingleWord(){
+        List<String> query = new ArrayList() {{ add(singleSearchWord); }};
+        Set<String> urlSet= testMap.getUrl(singleSearchWord);
+        Set<Page> pageSet = new HashSet<Page>();
+
+        for(String url: urlSet){
+            pageSet.add(testMap.getPage(url));
+        }
+         List<Page> pages = PageRanker.rankPages("titlePageRanker", query, pageSet);
+        
+         int last = Integer.MAX_VALUE;
+         for(Page page: pages){
+             int rank = page.getRank();
+             assertTrue(rank <= last);
+             last = rank;
+         }
+
+     }
+
+    @Test
+     void pageRanker_titlePageRanker_CorrectDecreasingSorting_MultipleWord(){
+        List<String> query = new ArrayList() {{ add(multiSearchWord); }};
+        Set<String> urlSet= testMap.getUrl(singleSearchWord);
+        Set<Page> pageSet = new HashSet<Page>();
+
+        for(String url: urlSet){
+            pageSet.add(testMap.getPage(url));
+        }
+         List<Page> pages = PageRanker.rankPages("titlePageRanker", query, pageSet);
+        
+         int last = Integer.MAX_VALUE;
+         for(Page page: pages){
+             int rank = page.getRank();
+             assertTrue(rank <= last);
+             last = rank;
+         }
+
+     }
+    @Test
+     void pageRanker_titlePageRanker_CorrectDecreasingSorting_MultipleOrWord(){
+        List<String> query = new ArrayList() {{ add(multiOrSearchWord); }};
+        Set<String> urlSet= testMap.getUrl(singleSearchWord);
+        Set<Page> pageSet = new HashSet<Page>();
+
+        for(String url: urlSet){
+            pageSet.add(testMap.getPage(url));
+        }
+         List<Page> pages = PageRanker.rankPages("titlePageRanker", query, pageSet);
+        
+         int last = Integer.MAX_VALUE;
+         for(Page page: pages){
+             int rank = page.getRank();
+             assertTrue(rank <= last);
+             last = rank;
+         }
+
+     }
+
+
+ }

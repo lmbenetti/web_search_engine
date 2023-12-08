@@ -1,5 +1,6 @@
 package searchengine;
 
+import java.util.List;
 import java.io.IOException;
 
 /**
@@ -14,11 +15,9 @@ public class Main {
      * @throws IOException if there is an IO error when reading the configuration file.
      */
     public static void main(final String... args) throws IOException {
-        
         System.out.println("Max memory: " + Runtime.getRuntime().maxMemory());
         WebServer webserver = new WebServer();
         webserver.runServer();
-
 
     }
 }
