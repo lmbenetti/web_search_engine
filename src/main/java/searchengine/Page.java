@@ -119,10 +119,21 @@ public class Page implements Comparable<Page>{
         return wordFrequency.get(word);
     }
 
+    
+    /** 
+     * Sets the pageRank-field to the integer value given as an argument in the page-instance.
+     * 
+     * @param rank
+     */
     public void setRank(int rank){
         this.pagerank = rank;
     }
 
+    
+    /** 
+     * Returns the pageRank-field of an instance of a Page.
+     * @return int
+     */
     public int getRank()
     {
         return this.pagerank;

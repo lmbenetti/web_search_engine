@@ -45,7 +45,7 @@ public class PageRanker {
      * A simple ranking algorithm which takes a list of query-strings and an unordered set of pages and returns an ordered list of pages. The ranking is only based on the frequency of words in a given website.
      * @param queries A list of strings reflecting the search-words from the query.
      * @param pages An unordered set of pages to be ranked.
-     * @return An ordered List<Page>-object is returned. 
+     * @return An unordered set of pages is retunrns with the pages now containing a pageRank-field. 
      */
     private static Set<Page> simplePageRanker(List<String> queries, Set<Page> pages){
 
@@ -65,6 +65,15 @@ public class PageRanker {
         return pages;
     }
 
+
+    
+    /** 
+     * A simple ranking algorithm which takes a list of query-strings and an unordered set of pages and gives each page a ranking-value. 
+     * The ranking is based on the freqency of a search-word in a given page, but it also takes the title of the page into account.
+     * @param queries A list of strings reflecting the search-words from the query.
+     * @param pages An unordered set of pages to be ranked.
+     * @return An unordered set of pages is retunrns with the pages now containing a pageRank-field.
+     */
     private static Set<Page> titlePageRanker(List<String> queries, Set<Page> pages){
 
         for (Page page : pages) {
@@ -95,11 +104,11 @@ public class PageRanker {
 
     
     /** 
-     * The frequency-pageranker implements a scoring system with a frequency score and invertedFrequencyDocumentScore
+     * The frequency-pageranker implements a scoring system with a frequency score and invertedFrequencyDocumentScore.
      * 
      * @param queries
      * @param pages
-     * @return List<Page>
+     * @return An unordered set of pages is retunrns with the pages now containing a pageRank-field.
      */
     private static Set<Page> invertedFrequencyPageRanker(List<String> queries, Set<Page> pages, Map<String, Double> IDFScores) {
         for (Page page : pages) {
