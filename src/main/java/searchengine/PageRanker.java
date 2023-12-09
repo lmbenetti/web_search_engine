@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Map;
+import java.util.HashSet;
 
 public class PageRanker {
     
@@ -18,21 +18,23 @@ public class PageRanker {
      * @return An ordered list of pages is returned based on the queries and unordered set of pages provides.
      */
     public static List<Page> rankPages(String queryType, List<String> queries, Set<Page> pages, Map<String, Double> IDFScores) {
-        List<Page> orderedList;
+        Set<Page> unOrderedSet;
         switch(queryType) {
             case "simplePageRanker":
-                orderedList = simplePageRanker(queries, pages);
+                unOrderedSet = simplePageRanker(queries, pages);
                 break;
             case "titlePageRanker":
-                orderedList = titlePageRanker(queries, pages);
+                unOrderedSet = titlePageRanker(queries, pages);
                 break;
             case "invertedFrequencyPageRanker":
-                orderedList = invertedFrequencyPageRanker(queries, pages, IDFScores);
+                unOrderedSet = invertedFrequencyPageRanker(queries, pages, IDFScores);
                 break;
             default:
-                orderedList = new ArrayList<Page>();
+                unOrderedSet = new HashSet<Page>();
         }
-          
+
+        List<Page> orderedList = new ArrayList<Page>(unOrderedSet);
+        Collections.sort(orderedList, Collections.reverseOrder());
         return orderedList;
     
     }
@@ -45,7 +47,7 @@ public class PageRanker {
      * @param pages An unordered set of pages to be ranked.
      * @return An ordered List<Page>-object is returned. 
      */
-    private static List<Page> simplePageRanker(List<String> queries, Set<Page> pages){
+    private static Set<Page> simplePageRanker(List<String> queries, Set<Page> pages){
 
 
         for(Page page: pages){
@@ -58,14 +60,12 @@ public class PageRanker {
                 }
             }
             page.setRank(rank);
-        }    
+        } 
 
-        List<Page> orderedList = new ArrayList<Page>(pages);
-        Collections.sort(orderedList, Collections.reverseOrder());
-        return orderedList;
+        return pages;
     }
 
-    private static List<Page> titlePageRanker(List<String> queries, Set<Page> pages){
+    private static Set<Page> titlePageRanker(List<String> queries, Set<Page> pages){
 
         for (Page page : pages) {
             int rank = 0;
@@ -90,9 +90,7 @@ public class PageRanker {
     
             page.setRank(rank);
         }
-        List<Page> orderedList = new ArrayList<Page>(pages);
-        Collections.sort(orderedList, Collections.reverseOrder());
-        return orderedList;
+        return pages;
     }
 
     
@@ -103,7 +101,7 @@ public class PageRanker {
      * @param pages
      * @return List<Page>
      */
-    private static List<Page> invertedFrequencyPageRanker(List<String> queries, Set<Page> pages, Map<String, Double> IDFScores) {
+    private static Set<Page> invertedFrequencyPageRanker(List<String> queries, Set<Page> pages, Map<String, Double> IDFScores) {
         for (Page page : pages) {
             int frequencyScore = 0;
             int rankTemp = 0;
@@ -131,9 +129,7 @@ public class PageRanker {
             page.setRank(frequencyScore);
         }
     
-        List<Page> orderedList = new ArrayList<>(pages);
-        Collections.sort(orderedList, Collections.reverseOrder());
-        return orderedList;
+        return pages;
     }
 
 
