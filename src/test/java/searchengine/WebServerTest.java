@@ -83,12 +83,13 @@ public class WebServerTest {
     @Test
     void lookupWebServer() {
         String baseURL = String.format("http://localhost:%d/search?q=", server.getServerPort());
-        assertEquals("[{\"url\": \"https://en.wikipedia.org/wiki/Werner_Heisenberg\", \"title\": \"Werner Heisenberg\"}, {\"url\": \"https://en.wikipedia.org/wiki/Papyrus\", \"title\": \"Papyrus\"}]", 
-            httpGet(baseURL + "paper"));
+        assertEquals("[{\"url\": \"https://en.wikipedia.org/wiki/Werner_Heisenberg\", \"title\": \"Werner Heisenberg\"}, {\"url\": \"https://en.wikipedia.org/wiki/Papyrus\", \"title\": \"Papyrus\"}]",
+          httpGet(baseURL + "paper"));
         assertEquals("[{\"url\": \"https://en.wikipedia.org/wiki/Geoff_Hurst\", \"title\": \"Geoff Hurst\"}]",
             httpGet(baseURL + "man"));
+    
         assertEquals("[{\"url\": \"https://en.wikipedia.org/wiki/Statue_of_Liberty\", \"title\": \"Statue of Liberty\"}]", 
-            httpGet(baseURL + "tablet"));
+        httpGet(baseURL + "tablet"));
         assertEquals("[]", 
             httpGet(baseURL + "locked"));   
     }

@@ -146,33 +146,4 @@ public class Page implements Comparable<Page>{
         return result;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Page other = (Page) obj;
-        if (url == null) {
-            if (other.url != null)
-                return false;
-        } else if (!url.equals(other.url))
-            return false;
-        if (title == null) {
-            if (other.title != null)
-                return false;
-        } else if (!title.equals(other.title))
-            return false;
-        if (wordFrequency == null) {
-            if (other.wordFrequency != null)
-                return false;
-        } else if (!wordFrequency.equals(other.wordFrequency))
-            return false;
-        if (pagerank != other.pagerank)
-            return false;
-        return true;
-    }
-
 }
