@@ -103,40 +103,35 @@ public class PageRanker {
      * @param pages
      * @return List<Page>
      */
-    private static List<Page> invertedFrequencyPageRanker(List<String> queries, Set<Page> pages, Map<String, Double> IDFScores){
-        int frequencyScore = 0;
-
-        for(Page page : pages){
-            page.setRank(0);
+    private static List<Page> invertedFrequencyPageRanker(List<String> queries, Set<Page> pages, Map<String, Double> IDFScores) {
+        for (Page page : pages) {
+            int frequencyScore = 0;
             int rankTemp = 0;
             boolean titleContainsQueryWord = false;
-            for(String query: queries){
-
-                //adding only the frequency score from the largest or-section
-                if(query.equalsIgnoreCase("or")){
+    
+            for (String query : queries) {
+                if (query.equalsIgnoreCase("or")) {
                     frequencyScore = rankTemp > frequencyScore ? rankTemp : frequencyScore;
-                }
-                //else, add the word-rank 
-                else{
+                } else {
                     int wordRank = page.getWordFrequency(query);
-                    rankTemp += wordRank == -1? 0: wordRank;
+                    rankTemp += wordRank == -1 ? 0 : wordRank;
                 }
-
+    
                 if (page.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                        titleContainsQueryWord = true;
+                    titleContainsQueryWord = true;
                 }
                 rankTemp = (int) ((double) rankTemp * IDFScores.get(query));
             }
-            
-            frequencyScore = rankTemp>frequencyScore?rankTemp:frequencyScore;
+    
+            frequencyScore = rankTemp > frequencyScore ? rankTemp : frequencyScore;
             if (titleContainsQueryWord) {
                 frequencyScore *= 2;
             }
-
+    
             page.setRank(frequencyScore);
         }
-
-        List<Page> orderedList = new ArrayList<Page>(pages);
+    
+        List<Page> orderedList = new ArrayList<>(pages);
         Collections.sort(orderedList, Collections.reverseOrder());
         return orderedList;
     }
