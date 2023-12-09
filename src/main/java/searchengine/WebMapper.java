@@ -4,9 +4,12 @@ import java.util.HashSet;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.lang.Math;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -20,13 +23,13 @@ import java.util.stream.Collectors;
  * 
  */
 public class WebMapper {
-    private HashMap<String, Set<String>> urlMap;
-    private HashMap<String, Page> pageMap;
+    private Map<String, Set<String>> urlMap;
+    private Map<String, Page> pageMap;
 
 
    /**
      * Constructor for WebMapper.
-     * Initializes the webMap using the path specified in the  config.txt file in the root-directory.
+     * Initializes the webMap, consisting of a urlMap and pageMap, using the path specified in the  config.txt file in the root-directory.
      *
      */   
     public WebMapper() {
@@ -97,7 +100,7 @@ public class WebMapper {
         return pageList;
     }
 
-    /** 
+    /***
      * A getter-method which retrieves a Set of URL's matching a search-term.
      * 
      * @param word
@@ -110,6 +113,26 @@ public class WebMapper {
        return urlMap.get(word).stream().collect(Collectors.toSet());
     }
 
+
+    
+    /** 
+     * The getIDF method takes a search-word and returns the Inverted Frequency Document Score for the given word in the PageMap.
+     * 
+     * @param word
+     * @return Double
+     */
+    public Double getIDF(String word){
+        int N = pageMap.keySet().size();
+        int DFt = 0;
+        for(Page page: pageMap.values()){
+            if(page.getWordFrequency(word) != -1 ){
+                DFt++;
+            }
+        }
+
+        return Math.log((double) N/ (double) DFt);
+
+    }
 
 
     

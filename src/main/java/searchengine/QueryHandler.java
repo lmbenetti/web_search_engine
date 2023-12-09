@@ -6,8 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 import java.util.Iterator;
 
 import java.util.regex.Pattern;
@@ -80,10 +82,12 @@ public class QueryHandler {
         }
 
         for(String url : urlSet){
-
             pageSet.add(webMap.getPage(url));
         }
-        return PageRanker.rankPages("titlePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), pageSet);
+
+        List<String> wordList = new ArrayList<>(Arrays.asList(query.split(" +")));
+
+        return PageRanker.rankPages("invertedFrequencyPageRanker", wordList, pageSet, getIDFscores(wordList));
     }
 
     
@@ -98,6 +102,8 @@ public class QueryHandler {
      */
     private List<Page> getPagesMultiWordQuery(String query){
 
+        List<String> wordList = new ArrayList<>();
+
         String[] orSections = getOrSections(query);
         String[] andSection;
 
@@ -110,6 +116,7 @@ public class QueryHandler {
 
             andSection = orSections[o].split(" +");
             for(int a = 0; a< andSection.length; a++){
+                wordList.add(andSection[a]);
                 andSets.add(webMap.getUrl(andSection[a]));
             }
             orSets.add(logicalAnd(andSets));
@@ -124,8 +131,11 @@ public class QueryHandler {
             pageSet.add(webMap.getPage(url));
         }
 
-        return PageRanker.rankPages("titlePageRanker", new ArrayList<>(Arrays.asList(query.split(" "))), pageSet);
+
+        return PageRanker.rankPages("invertedFrequencyPageRanker", wordList, pageSet, getIDFscores(wordList));
     }
+
+
 
     
     /** 
@@ -166,6 +176,21 @@ public class QueryHandler {
     }
 
 
+        
+    
+    /** 
+     * A private method which recieves a list of search-words and returns a map with the words matched to their IDF-scores.S
+     * 
+     * @param wordList
+     * @return Map<String, Double>
+     */
+    private Map<String, Double> getIDFscores(List<String> wordList){
+        Map<String, Double> IDFScore = new HashMap<String, Double>();
+        for(String word: wordList){
+            IDFScore.put(word, webMap.getIDF(word));
+        }
+        return IDFScore;
+    }
     
     /** 
      * A private method for turning a was string into a UTF_8-conform string

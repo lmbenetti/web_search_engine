@@ -46,6 +46,7 @@ import java.util.HashSet;
 
      @Test
      void pageRanker_simplePageRanker_CorrectDecreasingSorting_Single_Word(){
+
         List<String> query = new ArrayList() {{ add(singleSearchWord); }};
         Set<String> urlSet= testMap.getUrl(singleSearchWord);
         Set<Page> pageSet = new HashSet<Page>();
@@ -53,7 +54,12 @@ import java.util.HashSet;
         for(String url: urlSet){
             pageSet.add(testMap.getPage(url));
         }
-         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, pageSet);
+
+        
+        Map<String, Double> IDFMap = new HashMap<>();
+        IDFMap.put(singleSearchWord, testMap.getIDF(singleSearchWord));
+
+         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, pageSet, IDFMap);
         
          int last = Integer.MAX_VALUE;
          for(Page page: pages){
@@ -73,7 +79,13 @@ import java.util.HashSet;
         for(String url: urlSet){
             pageSet.add(testMap.getPage(url));
         }
-         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, pageSet);
+
+        Map<String, Double> IDFMap = new HashMap<>();
+        String[] wordArray = multiSearchWord.split(" +");
+        IDFMap.put(wordArray[0], testMap.getIDF(wordArray[0]));
+        IDFMap.put(wordArray[1], testMap.getIDF(wordArray[1]));
+
+         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, pageSet, IDFMap);
         
          int last = Integer.MAX_VALUE;
          for(Page page: pages){
@@ -93,7 +105,13 @@ import java.util.HashSet;
         for(String url: urlSet){
             pageSet.add(testMap.getPage(url));
         }
-         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, pageSet);
+
+        Map<String, Double> IDFMap = new HashMap<>();
+        String[] wordArray = multiOrSearchWord.split(" +");
+        IDFMap.put(wordArray[0], testMap.getIDF(wordArray[0]));
+        IDFMap.put(wordArray[2], testMap.getIDF(wordArray[2]));
+
+         List<Page> pages = PageRanker.rankPages("simplePageRanker", query, pageSet, IDFMap);
         
          int last = Integer.MAX_VALUE;
          for(Page page: pages){
@@ -113,7 +131,12 @@ import java.util.HashSet;
         for(String url: urlSet){
             pageSet.add(testMap.getPage(url));
         }
-         List<Page> pages = PageRanker.rankPages("titlePageRanker", query, pageSet);
+
+        
+        Map<String, Double> IDFMap = new HashMap<>();
+        IDFMap.put(singleSearchWord, testMap.getIDF(singleSearchWord));
+
+         List<Page> pages = PageRanker.rankPages("titlePageRanker", query, pageSet, IDFMap);
         
          int last = Integer.MAX_VALUE;
          for(Page page: pages){
@@ -133,7 +156,13 @@ import java.util.HashSet;
         for(String url: urlSet){
             pageSet.add(testMap.getPage(url));
         }
-         List<Page> pages = PageRanker.rankPages("titlePageRanker", query, pageSet);
+
+        Map<String, Double> IDFMap = new HashMap<>();
+        String[] wordArray = multiSearchWord.split(" +");
+        IDFMap.put(wordArray[0], testMap.getIDF(wordArray[0]));
+        IDFMap.put(wordArray[1], testMap.getIDF(wordArray[1]));
+
+         List<Page> pages = PageRanker.rankPages("titlePageRanker", query, pageSet, IDFMap);
         
          int last = Integer.MAX_VALUE;
          for(Page page: pages){
@@ -152,7 +181,13 @@ import java.util.HashSet;
         for(String url: urlSet){
             pageSet.add(testMap.getPage(url));
         }
-         List<Page> pages = PageRanker.rankPages("titlePageRanker", query, pageSet);
+
+        Map<String, Double> IDFMap = new HashMap<>();
+        String[] wordArray = multiOrSearchWord.split(" +");
+        IDFMap.put(wordArray[0], testMap.getIDF(wordArray[0]));
+        IDFMap.put(wordArray[2], testMap.getIDF(wordArray[2]));
+
+         List<Page> pages = PageRanker.rankPages("titlePageRanker", query, pageSet, IDFMap);
         
          int last = Integer.MAX_VALUE;
          for(Page page: pages){
@@ -162,6 +197,5 @@ import java.util.HashSet;
          }
 
      }
-
 
  }

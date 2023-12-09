@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Map;
 
 public class PageRanker {
     
@@ -16,7 +17,7 @@ public class PageRanker {
      * @param pages An unordered set of pages to be ranked.
      * @return An ordered list of pages is returned based on the queries and unordered set of pages provides.
      */
-    public static List<Page> rankPages(String queryType, List<String> queries, Set<Page> pages) {
+    public static List<Page> rankPages(String queryType, List<String> queries, Set<Page> pages, Map<String, Double> IDFScores) {
         List<Page> orderedList;
         switch(queryType) {
             case "simplePageRanker":
@@ -24,6 +25,9 @@ public class PageRanker {
                 break;
             case "titlePageRanker":
                 orderedList = titlePageRanker(queries, pages);
+                break;
+            case "invertedFrequencyPageRanker":
+                orderedList = invertedFrequencyPageRanker(queries, pages, IDFScores);
                 break;
             default:
                 orderedList = new ArrayList<Page>();
@@ -86,6 +90,52 @@ public class PageRanker {
     
             page.setRank(rank);
         }
+        List<Page> orderedList = new ArrayList<Page>(pages);
+        Collections.sort(orderedList, Collections.reverseOrder());
+        return orderedList;
+    }
+
+    
+    /** 
+     * The frequency-pageranker implements a scoring system with a frequency score and invertedFrequencyDocumentScore
+     * 
+     * @param queries
+     * @param pages
+     * @return List<Page>
+     */
+    private static List<Page> invertedFrequencyPageRanker(List<String> queries, Set<Page> pages, Map<String, Double> IDFScores){
+        int frequencyScore = 0;
+
+        for(Page page : pages){
+            page.setRank(0);
+            int rankTemp = 0;
+            boolean titleContainsQueryWord = false;
+            for(String query: queries){
+
+                //adding only the frequency score from the largest or-section
+                if(query.equalsIgnoreCase("or")){
+                    frequencyScore = rankTemp > frequencyScore ? rankTemp : frequencyScore;
+                }
+                //else, add the word-rank 
+                else{
+                    int wordRank = page.getWordFrequency(query);
+                    rankTemp += wordRank == -1? 0: wordRank;
+                }
+
+                if (page.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                        titleContainsQueryWord = true;
+                }
+                rankTemp = (int) ((double) rankTemp * IDFScores.get(query));
+            }
+            
+            frequencyScore = rankTemp>frequencyScore?rankTemp:frequencyScore;
+            if (titleContainsQueryWord) {
+                frequencyScore *= 2;
+            }
+
+            page.setRank(frequencyScore);
+        }
+
         List<Page> orderedList = new ArrayList<Page>(pages);
         Collections.sort(orderedList, Collections.reverseOrder());
         return orderedList;
