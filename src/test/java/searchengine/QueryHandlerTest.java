@@ -25,6 +25,12 @@ public class QueryHandlerTest {
     }
 
     @Test
+    void ProcessQuery_Empty(){
+        assertTrue(systemUnderTest.processQuery(" ").isEmpty());
+
+    }
+
+    @Test
     void ProcessQuery_IncorrectInput_SimpleQuery(){
         assertTrue(systemUnderTest.processQuery(" thiswordshouldnotexistinthedictionaryandshouldneverbesearchable ").isEmpty());
 
