@@ -96,6 +96,13 @@ public class PageTest {
         assertThrows(IllegalArgumentException.class, () -> { new Page(null); });
     }
 
+    @Test
+    void pageConstructor_invalidURLAsInput_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Page(new ArrayList<>(Arrays.asList("*PAGE\nthe\nunited\nstates\nof\namerica".split("\n"))));
+        });
+    }
+
 
     // @Test
     // void pageConstructor_CorrectInput_MapTest(){
