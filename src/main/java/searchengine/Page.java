@@ -36,7 +36,7 @@ public class Page implements Comparable<Page>{
      * @param webPage A list of strings representing the content of the Page.
      */
     private void validateData(List<String> webPage) {
-        if (webPage == null || webPage.size() < 2) {
+        if (webPage == null || webPage.size() <= 2) {
             throw new IllegalArgumentException("missing page data");
         }
     }

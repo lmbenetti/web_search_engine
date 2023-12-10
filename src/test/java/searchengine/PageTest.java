@@ -3,6 +3,7 @@ package searchengine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 // import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 // import static org.junit.jupiter.api.TestInstance.Lifecycle;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // import java.util.Random;
 import java.util.Set;
@@ -74,6 +75,25 @@ public class PageTest {
         expected.add("america");
 
         assertEquals(expected, systemUnderTest.getWebSiteWords());
+    }
+
+    @Test
+    void pageConstructor_onlyURLAndTitleAsInput_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Page(new ArrayList<>(Arrays.asList("*PAGE:https://en.wikipedia.org/wiki/United_States\nUnited States".split("\n"))));
+        });
+    }
+
+    @Test
+    void pageConstructor_onlyURLAndOneWordAsInput_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Page(new ArrayList<>(Arrays.asList("*PAGE:https://en.wikipedia.org/wiki/United_States\nthe".split("\n"))));
+        });
+    }
+    
+    @Test
+    void pageConstructor_inputIsNull_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> { new Page(null); });
     }
 
 
