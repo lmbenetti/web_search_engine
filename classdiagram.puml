@@ -1,76 +1,80 @@
-@startuml classdiagram
+@startuml
+package searchengine {
 
-class Main {
-    +main(String... args): void
+    class Main {
+        + main(args: String[]): void
+    }
+
+    class Page implements Comparable {
+        - url: String
+        - title: String
+        - wordFrequency: HashMap<String, Integer>
+        - pagerank: int
+        + Page(webPage: List<String>)
+        + getUrl(): String
+        + getTitle(): String
+        + getWebSiteWords(): Set<String>
+        + getWordFrequency(word: String): Integer
+        + setRank(rank: int): void
+        + getRank(): int
+        + compareTo(otherPage: Page): int
+        + hashCode(): int
+        - validateData(webPage: List<String>): void
+        - getWord(webPage: List<String>): HashMap<String, Integer>
+        - findUrl(firstLine: String): String
+    }
+
+    class PageRanker {
+        + rankPages(queryType: String, queries: List<String>, pages: Set<Page>, IDFScores: Map<String, Double>): List<Page>
+        - simplePageRanker(queries: List<String>, pages: Set<Page>): Set<Page>
+        - titlePageRanker(queries: List<String>, pages: Set<Page>): Set<Page>
+        - invertedFrequencyPageRanker(queries: List<String>, pages: Set<Page>, IDFScores: Map<String, Double>): Set<Page>
+    }
+
+    class QueryHandler {
+        - webMap: WebMapper
+        + processQuery(query: String): List<Page>
+        - validateQuery(query: String): boolean
+        - getPagesSingleWordQuery(query: String): List<Page>
+        - getPagesMultiWordQuery(query: String): List<Page>
+        - logicalOr(orSets: List<Set<String>>): Set<String>
+        - logicalAnd(andSets: List<Set<String>>): Set<String>
+        - getIDFscores(wordList: List<String>): Map<String, Double>
+        - decodeQuery(originalQuery: String): String
+        - isSimpleWord(query: String): boolean
+        - getOrSections(query: String): String[]
+    }
+
+    class WebMapper {
+        - urlMap: Map<String, Set<String>>
+        - pageMap: Map<String, Page>
+        + WebMapper()
+        + getUrl(word: String): Set<String>
+        + getIDF(word: String): Double
+        + getPage(url: String): Page
+        - getPages(filename: String): List<Page>
+    }
+
+    class WebServer {
+        - server: HttpServer
+        - queryHandler: QueryHandler
+        - serverState: boolean
+        + WebServer()
+        + runServer(): void
+        + stopServer(): void
+        + getServerState(): boolean
+        + getServerPort(): int
+        - printServerMessage(): void
+        - createServerContext(): void
+        - generateSearchResults(io: HttpExchange): void
+        - getFile(filename: String): byte[]
+        - respond(io: HttpExchange, code: int, mime: String, response: byte[]): void
+    }
+
+    Main .down.> WebServer : uses
+    PageRanker .down.> Page : uses
+    QueryHandler .right.> PageRanker : uses
+    QueryHandler .down.> WebMapper : uses
+    WebServer .down.> QueryHandler : uses
 }
-
-class WebServer {
-    -PORT: int
-    -server: HttpServer
-    -queryHandler: QueryHandler
-    -serverState: boolean
-    +WebServer()
-    -printServerMessage()
-    -createServerContext()
-    -generateSearchResults(HttpExchange)
-    -getFile(String): byte[]
-    -respond(HttpExchange, int, String, byte[])
-    +runServer()
-    +stopServer()
-    +getServerState(): boolean
-    +getServerPort(): int
-}
-
-class QueryHandler {
-    -webMap: WebMapper
-    +QueryHandler()
-    +processQuery(String): List<Page>
-    -validateQuery(String): boolean
-    -getPagesSingleWordQuery(String): List<Page>
-    -getPagesMultiWordQuery(String): List<Page>
-    -logicalOr(List<Set<Page>>): Set<Page>
-    -logicalAnd(List<Set<Page>>): Set<Page>
-    -decodeQuery(String): String
-    -isSimpleWord(String): boolean
-    -getOrSections(String): String[]
-}
-
-class WebMapper {
-    -webMap: HashMap<String, HashSet<Page>>
-    -fileName: String
-    +WebMapper()
-    +createInvertedIndex()
-    +getWebMap(): HashMap<String, HashSet<Page>>
-    +getPageSet(String): Set<Page>
-}
-
-class Page implements Comparable {
-    -url: String
-    -title: String
-    -wordFrequency: HashMap<String, Integer>
-    -pagerank: int
-    +Page(List<String> webPage)
-    +getUrl(): String
-    +getTitle(): String
-    +getWebSiteWords(): Set<String>
-    +getWordFrequency(String): Integer
-    +setRank(int): void
-    +getRank(): int
-    +compareTo(Page): int
-    +hashCode(): int
-    +equals(Object): boolean
-}
-
-class PageRanker {
-    +rankPages(String, List<String>, Set<Page>): List<Page>
-    -simplePageRanker(List<String>, Set<Page>): List<Page>
-    -titlePageRanker(List<String>, Set<Page>): List<Page>
-}
-
-Main --> WebServer : uses >
-WebServer --> QueryHandler : uses >
-QueryHandler --> WebMapper : uses >
-WebMapper --> Page : uses >
-PageRanker --> Page : uses >
-
 @enduml

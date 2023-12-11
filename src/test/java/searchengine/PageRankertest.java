@@ -35,7 +35,7 @@ import java.util.Map;
      @Test
      void pageRanker_simplePageRanker_CorrectDecreasingSorting_Single_Word(){
 
-        List<String> query = new ArrayList() {{ add(singleSearchWord); }};
+        List<String> query = new ArrayList<>() {{ add(singleSearchWord); }};
         Set<String> urlSet= testMap.getUrl(singleSearchWord);
         Set<Page> pageSet = new HashSet<Page>();
 
@@ -60,7 +60,7 @@ import java.util.Map;
 
      @Test
      void pageRanker_simplePageRanker_CorrectDecreasingSorting_MultipleWord(){
-        List<String> query = new ArrayList() {{ add(multiSearchWord); }};
+        List<String> query = new ArrayList<>() {{ add(multiSearchWord); }};
         Set<String> urlSet= testMap.getUrl(singleSearchWord);
         Set<Page> pageSet = new HashSet<Page>();
 
@@ -86,7 +86,7 @@ import java.util.Map;
 
     @Test
      void pageRanker_simplePageRanker_CorrectDecreasingSorting_MultipleOrWord(){
-        List<String> query = new ArrayList() {{ add(multiOrSearchWord); }};
+        List<String> query = new ArrayList<>() {{ add(multiOrSearchWord); }};
         Set<String> urlSet= testMap.getUrl(singleSearchWord);
         Set<Page> pageSet = new HashSet<Page>();
 
@@ -112,7 +112,7 @@ import java.util.Map;
 
      @Test
      void pageRanker_titlePageRanker_CorrectDecreasingSorting_SingleWord(){
-        List<String> query = new ArrayList() {{ add(singleSearchWord); }};
+        List<String> query = new ArrayList<>() {{ add(singleSearchWord); }};
         Set<String> urlSet= testMap.getUrl(singleSearchWord);
         Set<Page> pageSet = new HashSet<Page>();
 
@@ -137,7 +137,7 @@ import java.util.Map;
 
     @Test
      void pageRanker_titlePageRanker_CorrectDecreasingSorting_MultipleWord(){
-        List<String> query = new ArrayList() {{ add(multiSearchWord); }};
+        List<String> query = new ArrayList<>() {{ add(multiSearchWord); }};
         Set<String> urlSet= testMap.getUrl(singleSearchWord);
         Set<Page> pageSet = new HashSet<Page>();
 
@@ -162,7 +162,7 @@ import java.util.Map;
      }
     @Test
      void pageRanker_titlePageRanker_CorrectDecreasingSorting_MultipleOrWord(){
-        List<String> query = new ArrayList() {{ add(multiOrSearchWord); }};
+        List<String> query = new ArrayList<>() {{ add(multiOrSearchWord); }};
         Set<String> urlSet= testMap.getUrl(singleSearchWord);
         Set<Page> pageSet = new HashSet<Page>();
 

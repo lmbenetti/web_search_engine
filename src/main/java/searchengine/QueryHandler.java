@@ -48,13 +48,14 @@ public class QueryHandler {
         /** 
      * A method that checks wheter the user input is a valid query or no. To decide that it checks if
      * it is not empty abd if it contains at least one letter and not just a single special character.
+     * It also checks if the query starts or ends with the word "or", which is an invalid search
      * 
      * @param query A String that contains what the user has typed in the search block. 
      * @return boolean Returns true if the query is valid or false if it is not.
      */
     private boolean validateQuery(String query) {
         // check that query has content
-        if (query == null || query.trim().isEmpty() || query.startsWith("or ") || 
+        if (query.trim().isEmpty() || query.startsWith("or ") || 
         query.endsWith(" or") || (query.startsWith("or") && query.length()==2)) {
             return false;
         }
