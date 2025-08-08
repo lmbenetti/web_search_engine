@@ -12,7 +12,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 /**
- * The WebServer class is responsible for creating, running and stopping a local webserver.
+ * The WebServer class is responsible for creating, running and stopping a local
+ * webserver.
  */
 public class WebServer {
   private static final int BACKLOG = 0;
@@ -24,9 +25,11 @@ public class WebServer {
 
   /**
    * Constructor for WebServer.
-   * It creates an instance of the QueryHandler class and initializes the serverState variable.
+   * It creates an instance of the QueryHandler class and initializes the
+   * serverState variable.
    *
-   * @throws IOException if there is an IO error when initializing the QueryHandler class.
+   * @throws IOException if there is an IO error when initializing the
+   *                     QueryHandler class.
    */
   public WebServer() throws IOException {
     queryHandler = new QueryHandler();
@@ -65,7 +68,8 @@ public class WebServer {
    * Generates the search results in JSON for the searchTerm.
    *
    * @param io The HttpExchange object with the request.
-   * @throws UnsupportedEncodingException if the encoding specified in CHARSET is not supported.
+   * @throws UnsupportedEncodingException if the encoding specified in CHARSET is
+   *                                      not supported.
    */
   private void generateSearchResults(HttpExchange io) throws UnsupportedEncodingException {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
@@ -96,9 +100,9 @@ public class WebServer {
   /**
    * Sends the response to the client.
    *
-   * @param io The HttpExchange object.
-   * @param code The code of the HTTP status.
-   * @param mime The mimetype of the response.
+   * @param io       The HttpExchange object.
+   * @param code     The code of the HTTP status.
+   * @param mime     The mimetype of the response.
    * @param response The response content as an array of bytes.
    */
   private void respond(HttpExchange io, int code, String mime, byte[] response) {
@@ -137,7 +141,8 @@ public class WebServer {
   /**
    * Retrieves the state of the server.
    * 
-   * @return a boolean value representing if the server is currently running or not.
+   * @return a boolean value representing if the server is currently running or
+   *         not.
    */
   public boolean getServerState() {
     return serverState;

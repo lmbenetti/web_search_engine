@@ -10,15 +10,13 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.lang.Math;
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
-
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-    /**
+/**
  * The WebMapper class maps web pages to their corresponding URLs.
  * 
  */
@@ -26,29 +24,32 @@ public class WebMapper {
     private Map<String, Set<String>> urlMap;
     private Map<String, Page> pageMap;
 
-
-   /**
+    /**
      * Constructor for WebMapper.
-     * Initializes the webMap, consisting of a urlMap and pageMap, using the path specified in the  config.txt file in the root-directory.
+     * Initializes the webMap, consisting of a urlMap and pageMap, using the path
+     * specified in the config.txt file in the root-directory.
      *
-     */   
+     */
     public WebMapper() {
         try {
             String fileName = Files.readString(Paths.get("config.txt")).strip();
             urlMap = new HashMap<String, Set<String>>();
-            pageMap = new HashMap<String, Page>(); 
+            pageMap = new HashMap<String, Page>();
 
             List<Page> pageList = getPages(fileName);
-            for(Page page: pageList){
+            for (Page page : pageList) {
                 String url = page.getUrl();
-                for(String word: page.getWebSiteWords()){
-                    if(urlMap.containsKey(word)){
+                for (String word : page.getWebSiteWords()) {
+                    if (urlMap.containsKey(word)) {
                         Set<String> urlSet = urlMap.get(word);
                         urlSet.add(url);
                         urlMap.put(word, urlSet);
-                    }
-                    else{
-                        urlMap.put(word, new HashSet<String>() {{ add(url); }});
+                    } else {
+                        urlMap.put(word, new HashSet<String>() {
+                            {
+                                add(url);
+                            }
+                        });
                     }
                 }
                 pageMap.put(url, page);
@@ -60,16 +61,15 @@ public class WebMapper {
 
     }
 
-
-
-   /**
-     * Reads the file which is referenced by the filename and creates a list of Page objects from it.
+    /**
+     * Reads the file which is referenced by the filename and creates a list of Page
+     * objects from it.
      *
      * @param filename The name of the file which contains the data.
      * @return A list of Page objects created from the given file.
      */
     private List<Page> getPages(String filename) {
-    List<Page> pageList = new ArrayList<>();
+        List<Page> pageList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -104,47 +104,44 @@ public class WebMapper {
      * A getter-method which retrieves a Set of URL's matching a search-term.
      * 
      * @param word
-     * @return A Set<String> is returned with the URL-strings for websites containing the word parameter.
+     * @return A Set<String> is returned with the URL-strings for websites
+     *         containing the word parameter.
      */
-    public Set<String> getUrl(String word){
-        if(!urlMap.containsKey(word)){
+    public Set<String> getUrl(String word) {
+        if (!urlMap.containsKey(word)) {
             return new HashSet<String>();
         }
-       return urlMap.get(word).stream().collect(Collectors.toSet());
+        return urlMap.get(word).stream().collect(Collectors.toSet());
     }
 
-
-    
-    /** 
-     * The getIDF method takes a search-word and returns the Inverted Frequency Document Score for the given word in the PageMap.
+    /**
+     * The getIDF method takes a search-word and returns the Inverted Frequency
+     * Document Score for the given word in the PageMap.
      * 
      * @param word
      * @return Double
      */
-    public Double getIDF(String word){
+    public Double getIDF(String word) {
         int N = pageMap.keySet().size();
         int DFt = 0;
-        for(Page page: pageMap.values()){
-            if(page.getWordFrequency(word) != -1 ){
+        for (Page page : pageMap.values()) {
+            if (page.getWordFrequency(word) != -1) {
                 DFt++;
             }
         }
 
-        return Math.log((double) N/ (double) DFt);
+        return Math.log((double) N / (double) DFt);
 
     }
 
-
-    
-    /** 
+    /**
      * A getter-method which retrieves a Page-object matching a URL.
      * 
      * @param url
      * @return A Page-object is returned matching the provided URL
      */
-    public Page getPage(String url){
+    public Page getPage(String url) {
         return pageMap.get(url);
-
     }
 
 }

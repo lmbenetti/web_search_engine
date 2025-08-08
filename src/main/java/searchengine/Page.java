@@ -6,23 +6,25 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * The Page class represents a web page and includes the relevant information about the web page.
+ * The Page class represents a web page and includes the relevant information
+ * about the web page.
  *
  */
-public class Page implements Comparable<Page>{
+public class Page implements Comparable<Page> {
     private String url, title;
-    
+
     private HashMap<String, Integer> wordFrequency;
     private int pagerank;
 
     /**
      * Constructor for the Page class.
-     * Initializes a new instance of a Page with its corresponding URL, title, and word frequency.
+     * Initializes a new instance of a Page with its corresponding URL, title, and
+     * word frequency.
      *
      * @param webPage A list of strings representing the content of the Page.
      */
     public Page(List<String> webPage) {
-        
+
         validateData(webPage);
         this.url = findUrl(webPage.get(0));
         this.title = webPage.get(1);
@@ -45,21 +47,21 @@ public class Page implements Comparable<Page>{
      * Counts the frequency of words on the Page.
      * 
      * @param webPage A list of strings representing the content of the Page.
-     * @return A HashMap using words as keys and their corresponding frequency as values.
+     * @return A HashMap using words as keys and their corresponding frequency as
+     *         values.
      */
     private HashMap<String, Integer> getWord(List<String> webPage) {
-        HashMap<String, Integer> words =  new HashMap<String, Integer>();
+        HashMap<String, Integer> words = new HashMap<String, Integer>();
         Iterator<String> itr = webPage.iterator();
         itr.next();
         itr.next();
         String word = "";
 
-        while(itr.hasNext()){
+        while (itr.hasNext()) {
             word = itr.next();
-            if(words.containsKey(word)){
+            if (words.containsKey(word)) {
                 words.put(word, words.get(word) + 1);
-            }
-            else{
+            } else {
                 words.put(word, 1);
             }
         }
@@ -102,49 +104,49 @@ public class Page implements Comparable<Page>{
      *
      * @return A Set of strings containing all words found on the Page.
      */
-    public Set<String> getWebSiteWords(){
+    public Set<String> getWebSiteWords() {
         return wordFrequency.keySet();
     }
-    
+
     /**
      * Retrieves the frequency of a given word on the Page.
      *
      * @param word The word which frequency is to be retrieved.
-     * @return The integer value of the frequency of the given word. Returns -1 if the word was not found.
+     * @return The integer value of the frequency of the given word. Returns -1 if
+     *         the word was not found.
      */
-    public Integer getWordFrequency(String word){
-        if (!wordFrequency.containsKey(word)){
+    public Integer getWordFrequency(String word) {
+        if (!wordFrequency.containsKey(word)) {
             return -1;
         }
         return wordFrequency.get(word);
     }
 
-    
-    /** 
-     * Sets the pageRank-field to the integer value given as an argument in the page-instance.
+    /**
+     * Sets the pageRank-field to the integer value given as an argument in the
+     * page-instance.
      * 
      * @param rank
      */
-    public void setRank(int rank){
+    public void setRank(int rank) {
         this.pagerank = rank;
     }
 
-    
-    /** 
+    /**
      * Returns the pageRank-field of an instance of a Page.
+     * 
      * @return int
      */
-    public int getRank()
-    {
+    public int getRank() {
         return this.pagerank;
     }
 
-    //simple implementation for the usecase of ranking webpages
-    //it is still too simple to actually be good
+    // simple implementation for the usecase of ranking webpages
+    // it is still too simple to actually be good
     @Override
     public int compareTo(Page otherPage) {
         return Integer.compare(this.getRank(), otherPage.getRank());
-     }
+    }
 
     @Override
     public int hashCode() {

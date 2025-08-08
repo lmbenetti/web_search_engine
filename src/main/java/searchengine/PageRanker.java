@@ -8,18 +8,22 @@ import java.util.Map;
 import java.util.HashSet;
 
 public class PageRanker {
-    
-    
-    /** 
-     * A Static method which applies one of multiple ranking algorithms depending on the querytype argument. 
+
+    /**
+     * A Static method which applies one of multiple ranking algorithms depending on
+     * the querytype argument.
+     * 
      * @param queryType A string reflecting the applied ranking algorithm.
-     * @param queries A list of strings reflecting the search-words from the query.
-     * @param pages An unordered set of pages to be ranked.
-     * @return An ordered list of pages is returned based on the queries and unordered set of pages provides.
+     * @param queries   A list of strings reflecting the search-words from the
+     *                  query.
+     * @param pages     An unordered set of pages to be ranked.
+     * @return An ordered list of pages is returned based on the queries and
+     *         unordered set of pages provides.
      */
-    public static List<Page> rankPages(String queryType, List<String> queries, Set<Page> pages, Map<String, Double> IDFScores) {
+    public static List<Page> rankPages(String queryType, List<String> queries, Set<Page> pages,
+            Map<String, Double> IDFScores) {
         Set<Page> unOrderedSet;
-        switch(queryType) {
+        switch (queryType) {
             case "simplePageRanker":
                 unOrderedSet = simplePageRanker(queries, pages);
                 break;
@@ -36,86 +40,91 @@ public class PageRanker {
         List<Page> orderedList = new ArrayList<Page>(unOrderedSet);
         Collections.sort(orderedList, Collections.reverseOrder());
         return orderedList;
-    
+
     }
 
-    
-    
-    /** 
-     * A simple ranking algorithm which takes a list of query-strings and an unordered set of pages and returns an ordered list of pages. The ranking is only based on the frequency of words in a given website.
+    /**
+     * A simple ranking algorithm which takes a list of query-strings and an
+     * unordered set of pages and returns an ordered list of pages. The ranking is
+     * only based on the frequency of words in a given website.
+     * 
      * @param queries A list of strings reflecting the search-words from the query.
-     * @param pages An unordered set of pages to be ranked.
-     * @return An unordered set of pages is retunrns with the pages now containing a pageRank-field. 
+     * @param pages   An unordered set of pages to be ranked.
+     * @return An unordered set of pages is retunrns with the pages now containing a
+     *         pageRank-field.
      */
-    private static Set<Page> simplePageRanker(List<String> queries, Set<Page> pages){
+    private static Set<Page> simplePageRanker(List<String> queries, Set<Page> pages) {
 
-
-        for(Page page: pages){
+        for (Page page : pages) {
             int rank = 0;
-            for(String query : queries){
+            for (String query : queries) {
                 String[] splitQuery = query.split(" +");
-                for(String qWord: splitQuery){
+                for (String qWord : splitQuery) {
                     int toAdd = page.getWordFrequency(qWord);
-                    rank += toAdd == -1? 0: toAdd;
+                    rank += toAdd == -1 ? 0 : toAdd;
                 }
             }
             page.setRank(rank);
-        } 
+        }
 
         return pages;
     }
 
-
-    
-    /** 
-     * A simple ranking algorithm which takes a list of query-strings and an unordered set of pages and gives each page a ranking-value. 
-     * The ranking is based on the freqency of a search-word in a given page, but it also takes the title of the page into account.
+    /**
+     * A simple ranking algorithm which takes a list of query-strings and an
+     * unordered set of pages and gives each page a ranking-value.
+     * The ranking is based on the freqency of a search-word in a given page, but it
+     * also takes the title of the page into account.
+     * 
      * @param queries A list of strings reflecting the search-words from the query.
-     * @param pages An unordered set of pages to be ranked.
-     * @return An unordered set of pages is retunrns with the pages now containing a pageRank-field.
+     * @param pages   An unordered set of pages to be ranked.
+     * @return An unordered set of pages is retunrns with the pages now containing a
+     *         pageRank-field.
      */
-    private static Set<Page> titlePageRanker(List<String> queries, Set<Page> pages){
+    private static Set<Page> titlePageRanker(List<String> queries, Set<Page> pages) {
 
         for (Page page : pages) {
             int rank = 0;
             boolean titleContainsQueryWord = false;
-    
+
             for (String query : queries) {
                 String[] splitQuery = query.split(" +");
-    
+
                 for (String qWord : splitQuery) {
                     int toAdd = page.getWordFrequency(qWord);
                     rank += toAdd == -1 ? 0 : toAdd;
-    
+
                     if (page.getTitle().toLowerCase().contains(qWord.toLowerCase())) {
                         titleContainsQueryWord = true;
                     }
                 }
             }
-            
+
             if (titleContainsQueryWord) {
                 rank *= 2;
             }
-    
+
             page.setRank(rank);
         }
         return pages;
     }
 
-    
-    /** 
-     * The frequency-pageranker implements a scoring system with a frequency score and invertedFrequencyDocumentScore.
+    /**
+     * The frequency-pageranker implements a scoring system with a frequency score
+     * and invertedFrequencyDocumentScore.
      * 
      * @param queries
      * @param pages
-     * @return An unordered set of pages is retunrns with the pages now containing a pageRank-field.
+     * @return An unordered set of pages is retunrns with the pages now containing a
+     *         pageRank-field.
      */
-    private static Set<Page> invertedFrequencyPageRanker(List<String> queries, Set<Page> pages, Map<String, Double> IDFScores) {
+    private static Set<Page> invertedFrequencyPageRanker(List<String> queries, Set<Page> pages,
+            Map<String, Double> IDFScores) {
         for (Page page : pages) {
             int frequencyScore = 0;
             int rankTemp = 0;
             boolean titleContainsQueryWord = false;
-    
+
             for (String query : queries) {
                 if (query.equalsIgnoreCase("or")) {
                     frequencyScore = rankTemp > frequencyScore ? rankTemp : frequencyScore;
@@ -123,23 +132,22 @@ public class PageRanker {
                     int wordRank = page.getWordFrequency(query);
                     rankTemp += wordRank == -1 ? 0 : wordRank;
                 }
-    
+
                 if (page.getTitle().toLowerCase().contains(query.toLowerCase())) {
                     titleContainsQueryWord = true;
                 }
                 rankTemp = (int) ((double) rankTemp * IDFScores.get(query));
             }
-    
+
             frequencyScore = rankTemp > frequencyScore ? rankTemp : frequencyScore;
             if (titleContainsQueryWord) {
                 frequencyScore *= 2;
             }
-    
+
             page.setRank(frequencyScore);
         }
-    
+
         return pages;
     }
-
 
 }
